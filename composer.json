@@ -25,7 +25,7 @@
     },
     "autoload": {
         "psr-4": {
-            "lo\\modules\\email\\": "/src"
+            "lo\\modules\\email\\": ""
         }
     }
 }
