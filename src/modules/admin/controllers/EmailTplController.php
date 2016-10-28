@@ -2,17 +2,16 @@
 
 namespace lo\modules\email\modules\admin\controllers;
 
-use lo\core\modules\settings\actions\Settings;
-use lo\core\modules\settings\models\FormModel;
-use lo\modules\email\models\EmailItem;
-use Yii;
+use lo\modules\email\models\EmailTpl;
 use yii\web\Controller;
 use lo\core\actions\crud;
 
 /**
- * PageController implements the CRUD actions for Country model.
+ * Class EmailTplController
+ * @package lo\modules\email\modules\admin\controllers
+ * @author Lukyanov Andrey <loveorigami@mail.ru>
  */
-class EmailItemController extends Controller
+class EmailTplController extends Controller
 {
     /**
      * Действия
@@ -21,7 +20,7 @@ class EmailItemController extends Controller
 
     public function actions()
     {
-        $class = EmailItem::class;
+        $class = EmailTpl::class;
         return [
             'index'=>[
                 'class'=> crud\Index::class,
@@ -53,15 +52,6 @@ class EmailItemController extends Controller
                 'modelClass'=>$class,
             ],
 
-            'settings'=>[
-                'class'=>Settings::class,
-                'keys' => [
-                    'backend.email.send_session' => [
-                        'label' => Yii::t('backend', 'Send session'),
-                        'type' => FormModel::TYPE_TEXTINPUT,
-                    ],
-                ]
-            ],
         ];
     }
 

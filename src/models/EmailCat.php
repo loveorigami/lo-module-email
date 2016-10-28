@@ -5,15 +5,14 @@ namespace lo\modules\email\models;
 use lo\core\db\ActiveRecord;
 
 /**
- * This is the model class for table "email__item".
+ * This is the model class for table "email__cat".
  *
  * @property integer $id
- * @property string $email
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  */
-class EmailItem extends ActiveRecord
+class EmailCat extends ActiveRecord
 {
     const STATUS_DRAFT = 0;
     const STATUS_PUBLISHED = 1;
@@ -23,7 +22,7 @@ class EmailItem extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%email__item}}';
+        return '{{%email__cat}}';
     }
 
     /**
@@ -31,13 +30,7 @@ class EmailItem extends ActiveRecord
      */
     public function metaClass()
     {
-        return EmailItemMeta::class;
+        return EmailCatMeta::class;
     }
-
-    public function getCat()
-    {
-        return $this->hasOne(EmailCat::class, ['id' => 'cat_id']);
-    }
-
 
 }
