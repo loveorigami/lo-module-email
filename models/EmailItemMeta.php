@@ -33,10 +33,9 @@ class EmailItemMeta extends MetaFields
                 "definition" => [
                     "class" => fields\TextField::class,
                     "title" => Yii::t('backend', 'Name'),
-                    "showInGrid" => true,
+                    "showInGrid" => false,
                     "showInFilter" => true,
                     "isRequired" => false,
-                    "editInGrid" => true,
                 ],
                 "params" => [$this->owner, "name"]
             ],
@@ -72,6 +71,37 @@ class EmailItemMeta extends MetaFields
                     "isRequired" => false,
                 ],
                 "params" => [$this->owner, "hash"]
+            ],
+
+            "date_send" => [
+                "definition" => [
+                    "class" => fields\DateField::class,
+                    "title" => Yii::t('backend', 'Date send'),
+                    "showInGrid" => true,
+                    "showInFilter" => true,
+                    "isRequired" => false,
+                ],
+                "params" => [$this->owner, "date_send"]
+            ],
+            "date_subscribe" => [
+                "definition" => [
+                    "class" => fields\DateField::class,
+                    "title" => Yii::t('backend', 'Date subscribe'),
+                    "showInGrid" => false,
+                    "showInFilter" => true,
+                    "isRequired" => false,
+                ],
+                "params" => [$this->owner, "date_subscribe"]
+            ],
+            "date_unsubscribe" => [
+                "definition" => [
+                    "class" => fields\DateField::class,
+                    "title" => Yii::t('backend', 'Date unsubscribe'),
+                    "showInGrid" => true,
+                    "showInFilter" => true,
+                    "isRequired" => false,
+                ],
+                "params" => [$this->owner, "date_unsubscribe"]
             ],
         ];
     }

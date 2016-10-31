@@ -2,10 +2,7 @@
 
 namespace lo\modules\email\modules\admin\controllers;
 
-use lo\core\modules\settings\actions\Settings;
-use lo\core\modules\settings\models\FormModel;
 use lo\modules\email\models\EmailItem;
-use Yii;
 use yii\web\Controller;
 use lo\core\actions\crud;
 
@@ -53,15 +50,6 @@ class EmailItemController extends Controller
                 'modelClass'=>$class,
             ],
 
-            'settings'=>[
-                'class'=>Settings::class,
-                'keys' => [
-                    'backend.email.send_session' => [
-                        'label' => Yii::t('backend', 'Send session'),
-                        'type' => FormModel::TYPE_TEXTINPUT,
-                    ],
-                ]
-            ],
         ];
     }
 
