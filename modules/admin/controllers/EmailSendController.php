@@ -17,8 +17,8 @@ use yii\web\Controller;
  */
 class EmailSendController extends Controller
 {
-    const START_SEND = 'backend.email.start_send';
-    const END_SEND = 'backend.email.end_send';
+    const START_SEND = 'email.start_send';
+    const END_SEND = 'email.end_send';
 
     private $_settings;
 
@@ -37,7 +37,7 @@ class EmailSendController extends Controller
             'settings' => [
                 'class' => Settings::class,
                 'keys' => [
-                    'backend.email.send_session' => [
+                    'email.send_session' => [
                         'label' => Yii::t('backend', 'Send session'),
                         'type' => FormModel::TYPE_TEXTINPUT,
                     ],
@@ -61,7 +61,7 @@ class EmailSendController extends Controller
     {
         $start_send = $this->_settings->get(self::START_SEND);
         $end_send = $this->_settings->get(self::END_SEND);
-        $persent = CalculationHelper::getPersent($start_send, $end_send);
+        $persent = CalculationHelper::persent($start_send, $end_send);
 
         $model = new SparkpostForm();
         $model->start_send = $start_send;
