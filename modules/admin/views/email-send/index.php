@@ -17,23 +17,25 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $js = "
 
-$('#start-send').click(StartSend);
+//$('#start-send').click();
 var count = 0;
 
-function StartSend(e) {
-    e.preventDefault();
+setInterval(StartSend, 100);
+
+function StartSend() {
+    //e.preventDefault();
     count++;
     
 	var from = $('#sparkpostform-start_send').val();
     var to = $('#sparkpostform-end_send').val();
     
     var total = to - from;
-    var value = count * 100 / total + '%';
+    var value = (count * 100 / total).toFixed(2) + '%';
     
     if (count <= total) {
         $('.progress-bar').width(value).html(value);
-        StartSend(e);
-        console.log(value);
+        //StartSend(e);
+        //console.log(value);
     } 
 
 }
@@ -97,11 +99,12 @@ $this->registerJs($js, yii\web\View::POS_END);
     <div id="log">
         <?php
         echo Progress::widget([
-            'bars' => [
-                ['percent' => $persent, 'options' => ['class' => 'progress-bar-danger']],
-            ]
+            'percent' => $persent,
+            'label' => $persent . '%',
+            'barOptions' => ['class' => 'progress-bar-success'],
+            'options' => ['class' => 'active  progress-striped']
         ]);
-         ?>
+        ?>
     </div>
     <div class="col-md-6">
         <?php $form = ActiveForm::begin([

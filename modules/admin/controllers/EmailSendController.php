@@ -61,6 +61,7 @@ class EmailSendController extends Controller
     {
         $start_send = $this->_settings->get(self::START_SEND);
         $end_send = $this->_settings->get(self::END_SEND);
+
         $persent = CalculationHelper::persent($start_send, $end_send);
 
         $model = new SparkpostForm();
