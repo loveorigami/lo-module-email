@@ -3,8 +3,7 @@
 namespace lo\modules\email\modules\admin\controllers;
 
 use lo\core\helpers\CalculationHelper;
-use lo\core\modules\settings\actions\Settings;
-use lo\core\modules\settings\models\FormModel;
+use lo\core\actions\crud\Settings;
 use lo\modules\email\adapters\EmailSettingsInterface;
 use lo\modules\email\forms\SparkpostForm;
 use Yii;
@@ -17,6 +16,7 @@ use yii\web\Controller;
  */
 class EmailSendController extends Controller
 {
+    const SESSION = 'email.send_session';
     const START_SEND = 'email.start_send';
     const END_SEND = 'email.end_send';
 
@@ -37,17 +37,17 @@ class EmailSendController extends Controller
             'settings' => [
                 'class' => Settings::class,
                 'keys' => [
-                    'email.send_session' => [
+                    self::SESSION => [
                         'label' => Yii::t('backend', 'Send session'),
-                        'type' => FormModel::TYPE_TEXTINPUT,
+                        'type' => Settings::TYPE_TEXTINPUT,
                     ],
                     self::START_SEND => [
                         'label' => Yii::t('backend', 'Send start'),
-                        'type' => FormModel::TYPE_TEXTINPUT,
+                        'type' => Settings::TYPE_TEXTINPUT,
                     ],
                     self::END_SEND => [
                         'label' => Yii::t('backend', 'Send end'),
-                        'type' => FormModel::TYPE_TEXTINPUT,
+                        'type' => Settings::TYPE_TEXTINPUT,
                     ],
                 ]
             ],
