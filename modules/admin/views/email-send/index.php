@@ -9,71 +9,41 @@ use yii\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
- * @var \lo\modules\email\forms\SparkpostForm $model
- * @var int $persent
+ * @var \lo\modules\email\forms\EmailForm $model
+ * @var array $data
  */
 $this->title = Yii::t('backend', 'Send emails');
 $this->params['breadcrumbs'][] = $this->title;
 
 $js = "
 
-//$('#start-send').click();
-var count = 0;
-
-setInterval(StartSend, 100);
-
-function StartSend() {
-    //e.preventDefault();
-    count++;
-    
-	var from = $('#sparkpostform-start_send').val();
-    var to = $('#sparkpostform-end_send').val();
-    
-    var total = to - from;
-    var value = (count * 100 / total).toFixed(2) + '%';
-    
-    if (count <= total) {
-        $('.progress-bar').width(value).html(value);
-        //StartSend(e);
-        //console.log(value);
-    } 
-
-}
-
-
-function StartSend2(e) {
+$('#start-send').click(StartSend);
+   
+function StartSend(e) {
     e.preventDefault();
-    var from = $('input[name=from]').val();
-	var to = $('input[name=to]').val();
-	var total = to - from;
-    
-        $.ajax({
-				url: $('#email-form').attr('action'),
-				type: 'post',
-				dataType: 'json',
-				cache: false,
-				data: {
-					id: count,
-					id_cat: $('#select_egroup option:selected').val(),
-					tpl: $('#select_etpl option:selected').val()
-				},
-				success: function (msg) {
-					//count++;
-					//status = msg['status'];
-					
-					var value = count * 100 / total;
-					$('.progress-bar').attr('aria-valuenow', value);
-					
-					if (count <= total && status) {
-						$('#log').html(count + ' - ' + msg['text']);
-						StartParser(e);
-					} else{
-						alert(msg['text']);
-					}
-					
-				}
-			});
-    
+   
+    $.ajax({
+        url: $('#email-form').attr('action'),
+        type: 'post',
+        dataType: 'json',
+        cache: false,
+        data: {
+            cat_id: $('#emailform_cat_id option:selected').val(),
+            tpl_id: $('#emailform_tpl_id option:selected').val()
+        },
+        success: function (data) {
+            var value = data['percent'] + '%';
+            $('.progress-bar').width(value).html(value);
+            
+            $('#log').html(data['log']);
+            if (data['status']) {
+                StartSend(e);
+            } else {
+                alert(data['text']);
+            }
+        }
+    });
+
 }";
 
 $this->registerJs($js, yii\web\View::POS_END);
@@ -95,26 +65,26 @@ $this->registerJs($js, yii\web\View::POS_END);
 
     $categories = EmailCat::find()->select(['name', 'id'])->indexBy('id')->orderBy('name')->column();
     $templates = EmailTpl::find()->select(['name', 'id'])->indexBy('id')->orderBy('name')->column();
+
     ?>
-    <div id="log">
-        <?php
-        echo Progress::widget([
-            'percent' => $persent,
-            'label' => $persent . '%',
-            'barOptions' => ['class' => 'progress-bar-success'],
-            'options' => ['class' => 'active  progress-striped']
-        ]);
-        ?>
-    </div>
+
+    <?php
+    echo Progress::widget([
+        'percent' => $data['percent'],
+        'label' => $data['percent'] . '%',
+        'barOptions' => ['class' => 'progress-bar-success'],
+        'options' => ['class' => 'active  progress-striped']
+    ]);
+    ?>
+
     <div class="col-md-6">
         <?php $form = ActiveForm::begin([
             'id' => 'email-form',
+            'action' => ['email-send/send'],
         ]); ?>
 
         <?= $form->field($model, 'cat_id')->dropDownList($categories) ?>
         <?= $form->field($model, 'tpl_id')->dropDownList($templates) ?>
-        <?= $form->field($model, 'start_send')->textInput() ?>
-        <?= $form->field($model, 'end_send')->textInput() ?>
 
         <div class="form-group">
             <?= Html::submitButton('Начать рассылку', [
@@ -124,5 +94,8 @@ $this->registerJs($js, yii\web\View::POS_END);
         </div>
 
         <?php ActiveForm::end(); ?>
+    </div>
+    <div class="col-md-6">
+        <div id="log"></div>
     </div>
 </div>
