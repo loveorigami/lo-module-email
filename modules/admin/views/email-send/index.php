@@ -4,6 +4,7 @@ use lo\modules\email\models\EmailCat;
 use lo\modules\email\models\EmailTpl;
 use lo\widgets\modal\Modal;
 use yii\bootstrap\Progress;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -28,8 +29,8 @@ function StartSend(e) {
         dataType: 'json',
         cache: false,
         data: {
-            cat_id: $('#emailform_cat_id option:selected').val(),
-            tpl_id: $('#emailform_tpl_id option:selected').val()
+            cat_id: $('#emailform-cat_id option:selected').val(),
+            tpl: $('#emailform-tpl_id option:selected').val()
         },
         success: function (data) {
             var value = data['percent'] + '%';
@@ -64,7 +65,7 @@ $this->registerJs($js, yii\web\View::POS_END);
     echo TabMenu::widget();
 
     $categories = EmailCat::find()->select(['name', 'id'])->indexBy('id')->orderBy('name')->column();
-    $templates = EmailTpl::find()->select(['name', 'id'])->indexBy('id')->orderBy('name')->column();
+    $templates = ArrayHelper::map(EmailTpl::find()->published()->asArray()->orderBy("name")->all(), 'name', 'name');
 
     ?>
 
@@ -96,6 +97,8 @@ $this->registerJs($js, yii\web\View::POS_END);
         <?php ActiveForm::end(); ?>
     </div>
     <div class="col-md-6">
-        <div id="log"></div>
+        <div id="log">
+            <?= $this->render('log', ['data' => $data]) ?>
+        </div>
     </div>
 </div>
