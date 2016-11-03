@@ -56,7 +56,7 @@ class EmailItemRepository
         $item = EmailItem::find()
             ->where(['cat_id' => $cat_id])
             ->andWhere(['not', ['session_id' => $session]])
-            ->limit(1)->one();
+            ->published()->limit(1)->one();
 
         if ($item) {
             $item->session_id = $session;
