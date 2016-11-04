@@ -4,6 +4,8 @@ namespace lo\modules\email\modules\admin;
 
 use lo\modules\email\adapters\EmailSettings;
 use lo\modules\email\adapters\EmailSettingsInterface;
+use lo\modules\email\repositories\EmailItemRepository;
+use lo\modules\email\repositories\EmailItemRepositoryInterface;
 use Yii;
 use yii\base\BootstrapInterface;
 
@@ -23,6 +25,8 @@ class Bootstrap implements BootstrapInterface
             'class' => EmailSettings::class,
             'cachingDuration' => 6000,
         ]);
+
+        Yii::$container->setSingleton(EmailItemRepositoryInterface::class, EmailItemRepository::class);
     }
 
 }

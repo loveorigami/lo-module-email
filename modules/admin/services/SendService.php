@@ -8,15 +8,14 @@
 
 namespace lo\modules\email\modules\admin\services;
 
-
-use lo\modules\email\repositories\EmailItemRepository;
+use lo\modules\email\repositories\EmailItemRepositoryInterface;
 
 class SendService
 {
     private $emailRepository;
 
     public function __construct(
-        EmailItemRepository $emailRepository
+        EmailItemRepositoryInterface $emailRepository
     )
     {
         $this->emailRepository = $emailRepository;
@@ -33,7 +32,7 @@ class SendService
         $item = $this->emailRepository->findByGroupSession($cat_id, $session);
         if (!$item) return false;
 
-        return $item->email;
+        return $this->emailRepository->getEmail($item);
     }
 
 }

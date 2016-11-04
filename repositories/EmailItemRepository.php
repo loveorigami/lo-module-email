@@ -9,7 +9,7 @@ use lo\modules\email\models\EmailItem;
  * @package lo\modules\email\repositories
  * @author Lukyanov Andrey <loveorigami@mail.ru>
  */
-class EmailItemRepository
+class EmailItemRepository implements EmailItemRepositoryInterface
 {
     /**
      * @param $id
@@ -27,7 +27,7 @@ class EmailItemRepository
     /**
      * @param EmailItem $item
      */
-    public function add(EmailItem $item)
+    public function add($item)
     {
         if (!$item->getIsNewRecord()) {
             throw new \InvalidArgumentException('Model not exists');
@@ -38,12 +38,22 @@ class EmailItemRepository
     /**
      * @param EmailItem $item
      */
-    public function save(EmailItem $item)
+    public function save($item)
     {
         if ($item->getIsNewRecord()) {
             throw new \InvalidArgumentException('Model not exists');
         }
         $item->update(false);
+    }
+
+    /**
+     * @param EmailItem $item
+     * @return string
+     */
+    public function getEmail($item = null)
+    {
+        if (!$item) return false;
+        return $item->email;
     }
 
     /**
