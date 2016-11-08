@@ -57,6 +57,16 @@ class EmailItemRepository implements EmailItemRepositoryInterface
     }
 
     /**
+     * @param EmailItem $item
+     * @return string
+     */
+    public function getHash($item = null)
+    {
+        if (!$item) return false;
+        return $item->hash;
+    }
+
+    /**
      * @param $cat_id
      * @param $session
      * @return EmailItem

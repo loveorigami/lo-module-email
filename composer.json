@@ -22,7 +22,8 @@
   "require": {
     "yiisoft/yii2": "~2",
     "loveorigami/lo-core": "*",
-    "sparkpost/sparkpost": "~1.0"
+    "sparkpost/sparkpost": "~1.0",
+    "guzzlehttp/guzzle": "*"
   },
   "autoload": {
     "psr-4": {

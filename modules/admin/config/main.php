@@ -2,6 +2,14 @@
 
 return [
     'bootstrap' => ['lo\modules\email\modules\admin\Bootstrap'],
+    'components'=>[
+        'sparkpost' => [
+            'class' => \lo\modules\email\components\sparkpost\Mailer::class,
+            'apiKey' => getenv('SPARKPOST_API_KEY'),
+            'sandbox' => false,
+            'httpAdapter' => 'Ivory\HttpAdapter\Guzzle6HttpAdapter',
+        ],
+    ],
     'modules' => [
         'email' => [
             'class' => 'lo\modules\email\modules\admin\Module',

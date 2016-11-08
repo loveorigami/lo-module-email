@@ -38,6 +38,12 @@ interface EmailItemRepositoryInterface
     public function getEmail($item);
 
     /**
+     * @param $item
+     * @return string
+     */
+    public function getHash($item);
+
+    /**
      * @param $cat_id
      * @param $session
      * @return object

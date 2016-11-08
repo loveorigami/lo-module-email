@@ -10,6 +10,7 @@ use lo\core\db\ActiveRecord;
  * @property integer $id
  * @property string $email
  * @property integer $status
+ * @property integer $hash
  * @property integer $created_at
  * @property integer $updated_at
  */
