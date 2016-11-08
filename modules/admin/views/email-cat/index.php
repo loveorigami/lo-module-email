@@ -2,7 +2,7 @@
 use lo\core\widgets\admin\Grid;
 use lo\core\widgets\admin\CrudLinks;
 use lo\core\widgets\admin\TabMenu;
-use lo\widgets\modal\AjaxModal;
+use lo\widgets\modal\ModalAjax;
 
 /**
  * @var yii\web\View $this
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     echo TabMenu::widget();
     echo CrudLinks::widget(["action" => CrudLinks::CRUD_LIST, "model" => $searchModel]);
 
-    echo AjaxModal::widget([
+    echo ModalAjax::widget([
         'options' => ['class' => 'header-primary'],
         'autoClose' => true,
         'selector' => 'a.btn',

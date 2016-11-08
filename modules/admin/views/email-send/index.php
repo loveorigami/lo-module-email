@@ -2,7 +2,7 @@
 use lo\core\widgets\admin\TabMenu;
 use lo\modules\email\models\EmailCat;
 use lo\modules\email\models\EmailTpl;
-use lo\widgets\modal\AjaxModal;
+use lo\widgets\modal\ModalAjax;
 use yii\bootstrap\Progress;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -52,7 +52,7 @@ $this->registerJs($js, yii\web\View::POS_END);
 
 <div class="contact-form">
     <?php
-    echo AjaxModal::widget([
+    echo ModalAjax::widget([
         'header' => 'Email настройки',
         'toggleButton' => [
             'label' => 'Email настройки',
