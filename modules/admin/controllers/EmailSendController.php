@@ -2,7 +2,7 @@
 
 namespace lo\modules\email\modules\admin\controllers;
 
-use lo\core\helpers\CalculationHelper;
+use lo\core\helpers\MathHelper;
 use lo\core\actions\crud\Settings;
 use lo\modules\email\adapters\EmailSettingsInterface;
 use lo\modules\email\forms\EmailForm;
@@ -148,7 +148,7 @@ class EmailSendController extends Controller
             'email' => '',
             'status' => $status,
             'label' => 'success',
-            'percent' => CalculationHelper::percent($count, $limit),
+            'percent' => MathHelper::percent($count, $limit),
             'text' => $text
         ];
 
