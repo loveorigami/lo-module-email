@@ -65,6 +65,8 @@ class EmailItemMeta extends MetaFields
             "hash" => [
                 "definition" => [
                     "class" => fields\HashField::class,
+                    'hashMode' => fields\HashField::MODE_STRING,
+                    'generateFrom' => 'email',
                     "title" => Yii::t('backend', 'Hash'),
                     "showInGrid" => false,
                     "showInFilter" => false,
