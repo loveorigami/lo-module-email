@@ -21,7 +21,7 @@
   ],
   "require": {
     "loveorigami/lo-core": "*",
-    "sparkpost/sparkpost": "~2.0",
+    "sparkpost/sparkpost": "*",
     "guzzlehttp/guzzle": "*"
   },
   "require-dev": {
