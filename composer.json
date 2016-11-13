@@ -19,8 +19,7 @@
       "role": "Developer"
     }
   ],
-  "require": {
-    "yiisoft/yii2": "~2",
+  "require-dev": {
     "loveorigami/lo-core": "*",
     "sparkpost/sparkpost": "~2.0",
     "guzzlehttp/guzzle": "*"
