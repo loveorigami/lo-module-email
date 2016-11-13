@@ -21,11 +21,8 @@
   ],
   "require": {
     "loveorigami/lo-core": "*",
-    "sparkpost/sparkpost": "*",
+    "sparkpost/sparkpost": "~2",
     "guzzlehttp/guzzle": "*"
-  },
-  "require-dev": {
-    "php-http/client-implementation": "*"
   },
   "autoload": {
     "psr-4": {
