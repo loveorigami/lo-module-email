@@ -19,6 +19,7 @@
       "role": "Developer"
     }
   ],
+  "minimum-stability": "dev",
   "require": {
     "loveorigami/lo-core": "*",
     "sparkpost/sparkpost": "~2",
