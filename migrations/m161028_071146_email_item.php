@@ -1,4 +1,5 @@
 <?php
+namespace lo\modules\email\migrations;
 
 use lo\core\db\Migration;
 
@@ -36,12 +37,12 @@ class m161028_071146_email_item extends Migration
         $this->createIndex('idx_email_item_session', $this->tn(self::TBL), 'session_id');
 
 
-    $this->addForeignKey(
-        $this->fk(self::TBL, self::TBL_PARENT),
-        $this->tn(self::TBL), 'cat_id',
-        $this->tn(self::TBL_PARENT), 'id',
-        'CASCADE', 'CASCADE'
-    );
+        $this->addForeignKey(
+            $this->fk(self::TBL, self::TBL_PARENT),
+            $this->tn(self::TBL), 'cat_id',
+            $this->tn(self::TBL_PARENT), 'id',
+            'CASCADE', 'CASCADE'
+        );
 
     }
 

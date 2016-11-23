@@ -1,4 +1,5 @@
 <?php
+namespace lo\modules\email\migrations;
 
 use lo\core\db\Migration;
 
