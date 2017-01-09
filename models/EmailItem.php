@@ -19,6 +19,11 @@ class EmailItem extends ActiveRecord
     const STATUS_DRAFT = 0;
     const STATUS_PUBLISHED = 1;
 
+    const CATEGORY_SUBSCRIBE = 8;
+    const CATEGORY_CONTACT = 17;
+    const CATEGORY_COMMENT = 18;
+    const CATEGORY_MINISITE = 20;
+
     /**
      * @inheritdoc
      */

@@ -2,6 +2,7 @@
 
 namespace lo\modules\email\repositories;
 
+use lo\modules\email\dto\EmailItemDto;
 use lo\modules\email\models\EmailItem;
 
 /**
@@ -84,6 +85,38 @@ class EmailItemRepository implements EmailItemRepositoryInterface
         }
 
         return $item;
+    }
+
+    /**
+     * @param $email
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function findByEmail($email)
+    {
+        $item = EmailItem::find()
+            ->where(['email' => $email])->limit(1)->one();
+
+        return $item;
+    }
+
+    /**
+     * @param array $data
+     */
+    public function addEmailToCategoryContact(array $data)
+    {
+        $data['cat_id'] = EmailItem::CATEGORY_CONTACT;
+        $this->addEmail($data);
+    }
+
+    /**
+     * @param $data
+     */
+    public function addEmail($data)
+    {
+        $data = (array)new EmailItemDto($data);
+        $item = new EmailItem();
+        $item->setAttributes($data);
+        $this->add($item);
     }
 
 } 

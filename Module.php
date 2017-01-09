@@ -1,10 +1,10 @@
 <?php
 
-namespace lo\modules\geo;
+namespace lo\modules\email;
 
 class Module extends \yii\base\Module
 {
-    public $controllerNamespace = 'lo\modules\geo\controllers';
+    public $controllerNamespace = 'lo\modules\email\controllers';
 
     public function init()
     {
