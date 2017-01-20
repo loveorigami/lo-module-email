@@ -12,6 +12,8 @@ use Yii;
  */
 class EmailHandler
 {
+    const ADD_EMAIL = 'addEmail';
+
     /**
      * ```php
      *  $event = Yii::createObject(['class' => FormEvent::class, 'form' => $form]);
