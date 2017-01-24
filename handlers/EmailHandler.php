@@ -12,7 +12,7 @@ use Yii;
  */
 class EmailHandler
 {
-    const ADD_EMAIL = 'addEmail';
+    const HANDLER_ADD_EMAIL = 'addEmail';
 
     /**
      * ```php
