@@ -21,9 +21,9 @@
   ],
   "require": {
     "yiisoft/yii2": "~2",
-    "loveorigami/lo-core": "*",
+    "loveorigami/lo-core": "dev-master",
     "sparkpost/sparkpost": "~1.0",
-    "guzzlehttp/guzzle": "*"
+    "guzzlehttp/guzzle": "dev-master"
   },
   "autoload": {
     "psr-4": {
