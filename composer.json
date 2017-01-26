@@ -23,7 +23,7 @@
     "yiisoft/yii2": "~2",
     "loveorigami/lo-core": "dev-master",
     "sparkpost/sparkpost": "~1.0",
-    "guzzlehttp/guzzle": "dev-master"
+    "guzzlehttp/guzzle": "~6.2"
   },
   "autoload": {
     "psr-4": {
