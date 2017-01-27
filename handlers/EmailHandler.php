@@ -4,6 +4,7 @@ namespace lo\modules\email\handlers;
 
 use lo\modules\email\repositories\EmailItemRepository;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class EmailHandler
@@ -12,7 +13,8 @@ use Yii;
  */
 class EmailHandler
 {
-    const HANDLER_ADD_EMAIL = 'addEmail';
+    const HANDLER_SUBSCRIBE_EMAIL = 'subscribeEmail';
+    const CATEGORY_CONTACT = EmailItemRepository::class;
 
     /**
      * ```php
@@ -21,7 +23,7 @@ class EmailHandler
      * ```
      * @param $event
      */
-    public static function addEmail($event)
+    public static function subscribeEmail($event)
     {
         $email = $event->form->email;
         $name = $event->form->name;
@@ -30,7 +32,8 @@ class EmailHandler
         $item = $emailRepository->findByEmail($email);
 
         if (!$item) {
-            $emailRepository->addEmailToCategoryContact([
+            $emailRepository->addEmail([
+                'cat_id' => ArrayHelper::getValue($event->data, 'cat_id'),
                 'email' => $email,
                 'name' => $name,
                 'author_id' => Yii::$app->user->id

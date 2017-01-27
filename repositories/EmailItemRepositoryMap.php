@@ -1,5 +1,5 @@
 <?php
-namespace lo\modules\email\dto;
+namespace lo\modules\email\repositories;
 
 use lo\modules\email\models\EmailItem;
 
@@ -9,9 +9,10 @@ use lo\modules\email\models\EmailItem;
  * Date: 09.01.2017
  * Time: 13:07
  */
-class EmailItemDto
+class EmailItemRepositoryMap
 {
     const DEFAULT_AUTHOR = 1;
+    const DEFAULT_CATEGORY = EmailItem::CATEGORY_SUBSCRIBE;
 
     public $id;
     public $status = EmailItem::STATUS_PUBLISHED;
@@ -58,6 +59,10 @@ class EmailItemDto
 
         if (!$this->author_id) {
             $this->author_id = self::DEFAULT_AUTHOR;
+        }
+
+        if (!$this->cat_id) {
+            $this->cat_id = self::DEFAULT_CATEGORY;
         }
     }
 }

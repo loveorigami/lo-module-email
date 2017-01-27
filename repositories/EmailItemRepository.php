@@ -2,7 +2,6 @@
 
 namespace lo\modules\email\repositories;
 
-use lo\modules\email\dto\EmailItemDto;
 use lo\modules\email\models\EmailItem;
 
 /**
@@ -12,6 +11,8 @@ use lo\modules\email\models\EmailItem;
  */
 class EmailItemRepository implements EmailItemRepositoryInterface
 {
+    const CATEGORY_CONTACT = EmailItem::CATEGORY_CONTACT;
+
     /**
      * @param $id
      * @return EmailItem
@@ -100,20 +101,11 @@ class EmailItemRepository implements EmailItemRepositoryInterface
     }
 
     /**
-     * @param array $data
-     */
-    public function addEmailToCategoryContact(array $data)
-    {
-        $data['cat_id'] = EmailItem::CATEGORY_CONTACT;
-        $this->addEmail($data);
-    }
-
-    /**
      * @param $data
      */
     public function addEmail($data)
     {
-        $data = (array)new EmailItemDto($data);
+        $data = (array)new EmailItemRepositoryMap($data);
         $item = new EmailItem();
         $item->setAttributes($data);
         $this->add($item);
