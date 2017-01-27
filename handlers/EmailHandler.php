@@ -14,7 +14,7 @@ use yii\helpers\ArrayHelper;
 class EmailHandler
 {
     const HANDLER_SUBSCRIBE_EMAIL = 'subscribeEmail';
-    const CATEGORY_CONTACT = EmailItemRepository::class;
+    const CATEGORY_CONTACT = EmailItemRepository::CATEGORY_CONTACT;
 
     /**
      * ```php
