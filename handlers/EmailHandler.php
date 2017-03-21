@@ -13,8 +13,8 @@ use yii\helpers\ArrayHelper;
  */
 class EmailHandler
 {
-    const HANDLER_SUBSCRIBE_EMAIL = 'subscribeEmail';
-    const CATEGORY_CONTACT = EmailItemRepository::CATEGORY_CONTACT;
+    const HANDLER_SUBSCRIBE_CONTACT = 'subscribeEmailFromContact';
+    const HANDLER_SUBSCRIBE_ORDER = 'subscribeEmailFromOrder';
 
     /**
      * ```php
@@ -22,8 +22,9 @@ class EmailHandler
      *  $this->trigger(self::EVENT_AFTER_CONTACT, $event);
      * ```
      * @param $event
+     * @param $catId
      */
-    public static function subscribeEmail($event)
+    protected static function subscribeEmail($event, $catId)
     {
         $email = $event->form->email;
         $name = $event->form->name;
@@ -33,11 +34,27 @@ class EmailHandler
 
         if (!$item) {
             $emailRepository->addEmail([
-                'cat_id' => ArrayHelper::getValue($event->data, 'cat_id'),
+                'cat_id' => $catId,
                 'email' => $email,
                 'name' => $name,
                 'author_id' => Yii::$app->user->id
             ]);
         }
+    }
+
+    /**
+     * @param $event
+     */
+    public static function subscribeEmailFromContact($event)
+    {
+        self::subscribeEmail($event, EmailItemRepository::CATEGORY_CONTACT);
+    }
+
+    /**
+     * @param $event
+     */
+    public static function subscribeEmailFromOrder($event)
+    {
+        self::subscribeEmail($event, EmailItemRepository::CATEGORY_ORDER);
     }
 }

@@ -23,6 +23,7 @@ class EmailItem extends ActiveRecord
     const CATEGORY_CONTACT = 17;
     const CATEGORY_COMMENT = 18;
     const CATEGORY_MINISITE = 20;
+    const CATEGORY_ORDER = 24;
 
     /**
      * @inheritdoc

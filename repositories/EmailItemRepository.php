@@ -12,6 +12,7 @@ use lo\modules\email\models\EmailItem;
 class EmailItemRepository implements EmailItemRepositoryInterface
 {
     const CATEGORY_CONTACT = EmailItem::CATEGORY_CONTACT;
+    const CATEGORY_ORDER = EmailItem::CATEGORY_ORDER;
 
     /**
      * @param $id
