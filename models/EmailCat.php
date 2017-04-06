@@ -3,6 +3,7 @@
 namespace lo\modules\email\models;
 
 use lo\core\db\ActiveRecord;
+use lo\modules\email\models\meta\EmailCatMeta;
 
 /**
  * This is the model class for table "email__cat".

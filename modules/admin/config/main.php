@@ -1,7 +1,29 @@
 <?php
 
+use lo\modules\email\adapters\EmailSettings;
+use lo\modules\email\adapters\EmailSettingsInterface;
+use lo\modules\email\modules\admin\services\Mailing;
+use lo\modules\email\modules\admin\services\MailingInterface;
+use lo\modules\email\repositories\EmailItemRepository;
+use lo\modules\email\repositories\EmailItemRepositoryInterface;
+
 return [
-    'bootstrap' => ['lo\modules\email\modules\admin\Bootstrap'],
+    'container' => [
+        'definitions' => [
+
+        ],
+        'singletons' => [
+            EmailSettingsInterface::class => [
+                'class' => EmailSettings::class,
+                'cachingDuration' => 6000,
+            ],
+            EmailItemRepositoryInterface::class => EmailItemRepository::class,
+            MailingInterface::class => [
+                'class' => Mailing::class,
+                'fromEmail' => getenv('ADMIN_EMAIL'),
+            ]
+        ],
+    ],
     'components'=>[
         'sparkpost' => [
             'class' => \lo\modules\email\components\sparkpost\Mailer::class,

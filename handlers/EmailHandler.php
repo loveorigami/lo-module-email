@@ -4,7 +4,6 @@ namespace lo\modules\email\handlers;
 
 use lo\modules\email\repositories\EmailItemRepository;
 use Yii;
-use yii\helpers\ArrayHelper;
 
 /**
  * Class EmailHandler

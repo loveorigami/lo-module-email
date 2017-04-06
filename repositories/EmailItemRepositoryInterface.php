@@ -50,4 +50,10 @@ interface EmailItemRepositoryInterface
      */
     public function findByGroupSession($cat_id, $session);
 
+    /**
+     * @param array $data
+     * @return object
+     */
+    public function addEmail(array $data);
+
 }

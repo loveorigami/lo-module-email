@@ -6,7 +6,7 @@ interface MailingInterface
     /**
      * @param $tpl
      * @param $substitutionData
-     * @param array $emailTo send to user
+     * @param string $emailTo send to user
      */
     public function send($tpl, $substitutionData, $emailTo);
 

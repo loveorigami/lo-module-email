@@ -1,6 +1,7 @@
 <?php
-namespace lo\modules\email\models;
+namespace lo\modules\email\models\meta;
 
+use lo\modules\email\models\EmailCat;
 use Yii;
 use lo\core\db\MetaFields;
 use lo\core\db\fields;

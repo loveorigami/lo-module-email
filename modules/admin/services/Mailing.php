@@ -16,7 +16,7 @@ class Mailing implements MailingInterface
     /**
      * @param $tpl
      * @param $data
-     * @param array $emailTo send email to user
+     * @param string $emailTo send email to user
      */
     public function send($tpl, $data, $emailTo)
     {

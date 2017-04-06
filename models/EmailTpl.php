@@ -3,6 +3,7 @@
 namespace lo\modules\email\models;
 
 use lo\core\db\ActiveRecord;
+use lo\modules\email\models\meta\EmailTplMeta;
 
 /**
  * This is the model class for table "email__tpl".

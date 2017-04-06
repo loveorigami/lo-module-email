@@ -3,12 +3,14 @@
 namespace lo\modules\email\models;
 
 use lo\core\db\ActiveRecord;
+use lo\modules\email\models\meta\EmailItemMeta;
 
 /**
  * This is the model class for table "email__item".
  *
  * @property integer $id
  * @property string $email
+ * @property string $session_id
  * @property integer $status
  * @property integer $hash
  * @property integer $created_at

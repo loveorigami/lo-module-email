@@ -81,6 +81,7 @@ class EmailItemRepository implements EmailItemRepositoryInterface
             ->andWhere(['not', ['session_id' => $session]])
             ->published()->limit(1)->one();
 
+        /** @var EmailItem $item */
         if ($item) {
             $item->session_id = $session;
             $this->save($item);
@@ -102,14 +103,17 @@ class EmailItemRepository implements EmailItemRepositoryInterface
     }
 
     /**
-     * @param $data
+     * @param array $data
+     * @return EmailItem
      */
-    public function addEmail($data)
+    public function addEmail(array $data)
     {
         $data = (array)new EmailItemRepositoryMap($data);
         $item = new EmailItem();
         $item->setAttributes($data);
         $this->add($item);
+
+        return $item;
     }
 
 } 

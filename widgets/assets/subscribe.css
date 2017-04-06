@@ -1,0 +1,66 @@
+.ir-form {
+  float: left;
+  width: 380px;
+  height: 234px;
+  margin: 0 auto;
+  background: url("images/border.png") center 0 no-repeat #ffffff;
+  border: 1px solid #999166;
+}
+@media (max-width: 1158px) {
+  .ir-form {
+    float: none;
+    margin: 25px auto 0;
+  }
+}
+@media (max-width: 450px) {
+  .ir-form {
+    width: 271px;
+    height: 167px;
+    -webkit-background-size: contain;
+    background-size: contain;
+  }
+  .ir-form label {
+    display: none;
+  }
+}
+.ir-form .inner {
+  width: 245px;
+  padding: 30px 0 15px;
+  margin: 0 auto;
+  text-align: center;
+}
+@media (max-width: 450px) {
+  .ir-form .inner {
+    padding-top: 20px;
+  }
+}
+.ir-form .inner p {
+  margin: 0 0 12px;
+  font-size: 18px;
+  line-height: 1.2em;
+  font-family: elektra_medium_proregular, Arial, sans-serif;
+}
+@media (max-width: 450px) {
+  .ir-form .inner p {
+    font-size: 12px;
+  }
+}
+.ir-form .inner .field {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 9px;
+}
+.ir-form .inner .field input {
+  height: 34px;
+  line-height: 34px;
+}
+.ir-form .inner button {
+  height: 32px;
+  line-height: 32px;
+  padding-left: 45px;
+  padding-right: 35px;
+}
+.ir-form .inner button:after {
+  border-top-width: 16px;
+  border-bottom-width: 16px;
+}
