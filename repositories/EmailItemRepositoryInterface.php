@@ -33,6 +33,11 @@ interface EmailItemRepositoryInterface
 
     /**
      * @param $item
+     */
+    public function unsubscribe($item);
+
+    /**
+     * @param $item
      * @return string
      */
     public function getEmail($item);
@@ -49,6 +54,24 @@ interface EmailItemRepositoryInterface
      * @return object
      */
     public function findByGroupSession($cat_id, $session);
+
+    /**
+     * @param $email
+     * @return mixed
+     */
+    public function findByEmail($email);
+
+    /**
+     * @param $email
+     * @return mixed
+     */
+    public function findBySubscribeEmail($email);
+
+    /**
+     * @param $hash
+     * @return mixed
+     */
+    public function findByHash($hash);
 
     /**
      * @param array $data

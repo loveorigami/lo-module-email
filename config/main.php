@@ -23,6 +23,8 @@ return [
         'urlManager' => [
             'rules' => [
                 ['pattern' => 'subscribe', 'route' => 'email/subscribe/index'],
+                ['pattern' => 'unsubscribe/<hash>', 'route' => 'email/unsubscribe/hash'],
+                ['pattern' => 'unsubscribe', 'route' => 'email/unsubscribe/index'],
             ]
         ]
     ],

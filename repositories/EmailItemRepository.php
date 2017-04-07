@@ -51,6 +51,18 @@ class EmailItemRepository implements EmailItemRepositoryInterface
 
     /**
      * @param EmailItem $item
+     */
+    public function unsubscribe($item)
+    {
+        $data = [
+            'status' => EmailItem::STATUS_DRAFT
+        ];
+        $item->setAttributes($data);
+        $this->save($item);
+    }
+
+    /**
+     * @param EmailItem $item
      * @return string
      */
     public function getEmail($item = null)
@@ -103,6 +115,36 @@ class EmailItemRepository implements EmailItemRepositoryInterface
     }
 
     /**
+     * @param $hash
+     * @return mixed
+     */
+    public function findByHash($hash)
+    {
+        $item = EmailItem::find()
+            ->where(['hash' => $hash])
+            ->limit(1)
+            ->published()
+            ->one();
+
+        return $item;
+    }
+
+    /**
+     * @param $email
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function findBySubscribeEmail($email)
+    {
+        $item = EmailItem::find()
+            ->where(['email' => $email])
+            ->limit(1)
+            ->published()
+            ->one();
+
+        return $item;
+    }
+
+    /**
      * @param array $data
      * @return EmailItem
      */
@@ -115,5 +157,4 @@ class EmailItemRepository implements EmailItemRepositoryInterface
 
         return $item;
     }
-
-} 
+}
