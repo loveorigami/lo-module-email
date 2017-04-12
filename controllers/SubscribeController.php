@@ -16,7 +16,7 @@ class SubscribeController extends Controller
 {
     protected $emailService;
 
-    public function __construct($id, $module, emailService $emailService, $config = [])
+    public function __construct($id, $module, EmailService $emailService, $config = [])
     {
         $this->emailService = $emailService;
         parent::__construct($id, $module, $config);
