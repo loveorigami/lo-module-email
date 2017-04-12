@@ -32,8 +32,7 @@ class UnsubscribeController extends Controller
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
-                $data = $form->toArray();
-                $this->emailService->unsubscribeByEmail($data['email']);
+                $this->emailService->unsubscribeByEmail($form->email);
 
                 Yii::$app->session->setFlash('success', 'Вы успешно отписались от рассылки');
                 return $this->refresh();
