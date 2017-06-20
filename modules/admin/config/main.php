@@ -20,7 +20,7 @@ return [
             EmailItemRepositoryInterface::class => EmailItemRepository::class,
             MailingInterface::class => [
                 'class' => Mailing::class,
-                'fromEmail' => getenv('ADMIN_EMAIL'),
+                'fromEmail' => 'noreply@gintur.com',
             ]
         ],
     ],
