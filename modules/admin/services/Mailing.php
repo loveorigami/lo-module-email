@@ -1,18 +1,11 @@
 <?php
 
 namespace lo\modules\email\modules\admin\services;
-
+use yii\base\Component;
 use Yii;
 
 class Mailing implements MailingInterface
 {
-    private $fromEmail;
-
-    public function __construct($fromEmail)
-    {
-        $this->fromEmail = $fromEmail;
-    }
-
     /**
      * @param $tpl
      * @param $data
@@ -20,12 +13,11 @@ class Mailing implements MailingInterface
      */
     public function send($tpl, $data, $emailTo)
     {
-        Yii::$app->sparkpost->compose()
+        $sparkpost = Yii::$app->sparkpost;
+        $sparkpost->compose()
             ->setTemplateId($tpl)
             ->setSubstitutionData($data)
-            ->setFrom($this->fromEmail)
             ->setTo($emailTo)
             ->send();
     }
-
 } 

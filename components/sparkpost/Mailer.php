@@ -1,8 +1,9 @@
 <?php
+
 namespace lo\modules\email\components\sparkpost;
 
-use Ivory\HttpAdapter\Configuration;
-use Ivory\HttpAdapter\CurlHttpAdapter;
+use GuzzleHttp\Client as SPClient;
+use Http\Adapter\Guzzle6\Client as SPAdapter;
 use SparkPost\APIResponseException;
 use SparkPost\SparkPost;
 use yii\base\InvalidConfigException;
@@ -14,29 +15,26 @@ use yii\mail\BaseMailer;
  * Mailer consumes Message object and sends it through Sparkpost API.
  *
  * @see Message
+ * @author Danil Zakablukovskii <danil.kabluk@gmail.com>
  */
 class Mailer extends BaseMailer
 {
     const LOG_CATEGORY = 'sparkpost-mailer';
-
     /**
      * Allowed limit for send retries, positive integer.
      * If limit is reached, last error will be thrown.
      * @var int
      */
     public $retryLimit = 5;
-
     /**
      * As a default http adapter will be used CurlHttpAdapter.
      * @var array|callable|string
      */
     public $httpAdapter;
-
     /**
      * @var string SparkPost API Key, required.
      */
     public $apiKey;
-
     /**
      * Whether to use the sandbox mode.
      * You can send up to 50 messages.
@@ -44,39 +42,33 @@ class Mailer extends BaseMailer
      * @var bool sandbox mode
      */
     public $sandbox = false;
-
     /**
      * Additional SparkPost config
      * @see \SparkPost\SparkPost::$apiDefaults
      * @var array sparkpost config
      */
     public $sparkpostConfig = [];
-
     /**
      * Whether to use default email for 'from' and 'reply to' fields if they are empty.
      * @var bool default email usage
      */
     public $useDefaultEmail = true;
-
     /**
      * Default sender email.
      * If not specified, application name + params[adminEmail] will be used.
      * @var string default email
      */
     public $defaultEmail;
-
     /**
      * If the development mode is enabled, Mailer will throw an exception if something goes wrong.
      * If the development mode is disabled, Mailer will fail gracefully.
      * @var bool
      */
     public $developmentMode = true;
-
     /**
      * @inheritdoc
      */
     public $messageClass = 'lo\modules\email\components\sparkpost\Message';
-
     /** @var int amount of sent messages last 'sendMessage' call */
     public $sentCount = 0;
     /** @var int amount of rejected messages last 'sendMessage' call */
@@ -85,7 +77,6 @@ class Mailer extends BaseMailer
     public $lastTransmissionId;
     /** @var null|APIResponseException last transmission exception (if any) */
     public $lastError;
-
     /** @var SparkPost */
     private $_sparkPost;
 
@@ -97,27 +88,29 @@ class Mailer extends BaseMailer
         if (!$this->apiKey) {
             throw new InvalidConfigException('"' . get_class($this) . '::apiKey" must be set.');
         }
-
         if (!is_string($this->apiKey)) {
             throw new InvalidConfigException('"' . get_class($this) . '::apiKey" must be a string, ' .
                 gettype($this->apiKey) . ' given.');
         }
-
         $this->sparkpostConfig['key'] = $this->apiKey;
-
         // Initialize the http adapter, cUrl adapter is default
-        $adapterConfig = new Configuration();
-        $adapterConfig->setTimeout(4);
-        $httpAdapter = $this->httpAdapter ? BaseYii::createObject($this->httpAdapter) : new CurlHttpAdapter($adapterConfig);
-        $this->_sparkPost = new SparkPost($httpAdapter, $this->sparkpostConfig);
+        $httpClient = new SPAdapter(new SPClient(
+            [
+                'request.options' => [
+                    'timeout' => 4,
+                    'connect_timeout' => 0
+                ]
+            ]
+        ));
 
+        $httpAdapter = $this->httpAdapter ? BaseYii::createObject($this->httpAdapter) : $httpClient;
+        $this->_sparkPost = new SparkPost($httpAdapter, $this->sparkpostConfig);
         if ($this->useDefaultEmail && !$this->defaultEmail) {
             if (!isset(\Yii::$app->params['adminEmail'])) {
                 throw new InvalidConfigException('You must set "' . get_class($this) .
                     '::defaultEmail" or have "adminEmail" key in application params or disable  "' . get_class($this) .
                     '::useDefaultEmail"');
             }
-
             $this->defaultEmail = \Yii::$app->name . '<' . \Yii::$app->params['adminEmail'] . '>';
         }
     }
@@ -152,14 +145,11 @@ class Mailer extends BaseMailer
         } else {
             $message = parent::compose($view, $params);
         }
-
         // make given params also available as substitution data
         $message->setSubstitutionData($params);
-
         if ($this->sandbox) {
             $message->setSandbox(true);
         }
-
         // set default message sender email
         if ($this->useDefaultEmail) {
             if (!$message->getFrom()) {
@@ -169,7 +159,6 @@ class Mailer extends BaseMailer
                 $message->setReplyTo($this->defaultEmail);
             }
         }
-
         return $message;
     }
 
@@ -186,28 +175,22 @@ class Mailer extends BaseMailer
         // Clear info about last transmission.
         $this->lastTransmissionId = $this->lastError = null;
         $this->sentCount = $this->rejectedCount = 0;
-
         if (!$message->getTo()) {
             \Yii::warning('Message was not sent, because "to" recipients list is empty', self::LOG_CATEGORY);
-
             return false;
         }
-
         $attemptsCount = 0;
         while ($attemptsCount <= $this->retryLimit) {
             $attemptsCount++;
-
             try {
                 return $this->internalSend($message);
             } catch (APIResponseException $e) {
                 $this->lastError = $e;
             }
         }
-
         // Transmission wasn't sent.
         \Yii::error("An error occurred in mailer: {$this->lastError->getMessage()}, code: {$this->lastError->getAPICode()}, api message: \"{$this->lastError->getAPIMessage()}\", api description: \"{$this->lastError->getAPIDescription()}\"",
             self::LOG_CATEGORY);
-
         if ($this->developmentMode) {
             throw $this->lastError;
         } else {
@@ -221,25 +204,23 @@ class Mailer extends BaseMailer
      */
     protected function internalSend($message)
     {
-        $result = $this->_sparkPost->transmission->send($message->toSparkPostArray());
+        $promise = $this->_sparkPost->transmissions->post($message->getTransmissionData());
+        $response = $promise->wait();
+        $result = $response->getBody();
         $this->lastTransmissionId = ArrayHelper::getValue($result, 'results.id');
-
         // Rejected messages.
         $this->rejectedCount = ArrayHelper::getValue($result, 'results.total_rejected_recipients');
         if ($this->rejectedCount > 0) {
             \Yii::info("Transmission #{$this->lastTransmissionId}: {$this->rejectedCount} rejected",
                 self::LOG_CATEGORY);
         }
-
         // Sent messages.
         $this->sentCount = ArrayHelper::getValue($result, 'results.total_accepted_recipients');
         if ($this->sentCount === 0) {
             \Yii::info("Transmission #{$this->lastTransmissionId} was rejected: all {$this->rejectedCount} rejected",
                 self::LOG_CATEGORY);
-
             return false;
         }
-
         return true;
     }
 

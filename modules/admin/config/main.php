@@ -18,18 +18,7 @@ return [
                 'cachingDuration' => 6000,
             ],
             EmailItemRepositoryInterface::class => EmailItemRepository::class,
-            MailingInterface::class => [
-                'class' => Mailing::class,
-                'fromEmail' => 'noreply@gintur.com',
-            ]
-        ],
-    ],
-    'components'=>[
-        'sparkpost' => [
-            'class' => \lo\modules\email\components\sparkpost\Mailer::class,
-            'apiKey' => getenv('SPARKPOST_API_KEY'),
-            'sandbox' => false,
-            'httpAdapter' => 'Ivory\HttpAdapter\Guzzle6HttpAdapter',
+            MailingInterface::class =>  Mailing::class
         ],
     ],
     'modules' => [
