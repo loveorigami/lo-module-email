@@ -21,8 +21,9 @@
   ],
   "require": {
     "yiisoft/yii2": "~2",
-    "sparkpost/sparkpost": "~2.1",
-    "guzzlehttp/guzzle": "~6.2"
+    "guzzlehttp/guzzle": "~6.2",
+    "php-http/guzzle6-adapter": "^1.1",
+    "sparkpost/sparkpost": "~2.1"
   },
   "autoload": {
     "psr-4": {
