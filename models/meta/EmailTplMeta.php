@@ -4,6 +4,7 @@ namespace lo\modules\email\models\meta;
 use Yii;
 use lo\core\db\MetaFields;
 use lo\core\db\fields;
+use lo\core\inputs;
 
 
 /**
@@ -13,6 +14,8 @@ use lo\core\db\fields;
  */
 class EmailTplMeta extends MetaFields
 {
+    const PATH = "emails/tpl";
+
     /**
      * @inheritdoc
      */
@@ -32,11 +35,14 @@ class EmailTplMeta extends MetaFields
             ],
             "text" => [
                 "definition" => [
-                    "class" => fields\TextField::class,
+                    "class" => fields\HtmlField::class,
+                    "inputClass" => [
+                        'class' => inputs\CKEditorInput::class,
+                        'path' => self::PATH,
+                    ],
                     "title" => Yii::t('backend', 'Text'),
-                    "showInGrid" => true,
-                    "showInFilter" => true,
-                    "isRequired" => true,
+                    "showInGrid" => false,
+                    "isRequired" => false,
                 ],
                 "params" => [$this->owner, "text"]
             ],
