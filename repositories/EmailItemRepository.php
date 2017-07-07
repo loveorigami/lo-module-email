@@ -2,6 +2,7 @@
 
 namespace lo\modules\email\repositories;
 
+use lo\core\helpers\DateHelper;
 use lo\modules\email\models\EmailItem;
 
 /**
@@ -91,11 +92,13 @@ class EmailItemRepository implements EmailItemRepositoryInterface
         $item = EmailItem::find()
             ->where(['cat_id' => $cat_id])
             ->andWhere(['not', ['session_id' => $session]])
+            ->orderBy(['date_send' => SORT_ASC])
             ->published()->limit(1)->one();
 
         /** @var EmailItem $item */
         if ($item) {
             $item->session_id = $session;
+            $item->date_send = DateHelper::nowDate();
             $this->save($item);
         }
 
