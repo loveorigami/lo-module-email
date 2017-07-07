@@ -42,12 +42,8 @@ class SendService
      */
     public function sendEmail($emailTo, $tpl)
     {
-        $status = $this->mailing->send($emailTo, $tpl, [
+        $this->mailing->send($emailTo, $tpl, [
             'hash' => $this->emailRepository->getHash($this->item)
         ]);
-
-        if (!$status) {
-            // blocked
-        }
     }
 }
