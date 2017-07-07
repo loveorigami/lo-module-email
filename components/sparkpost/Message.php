@@ -646,7 +646,7 @@ class Message extends BaseMessage
     {
         $to = ArrayHelper::getValue($this->getTo(), 'address.email', []);
         $cc = ArrayHelper::getValue($this->getCc(), 'address.email', []);
-        $bc = ArrayHelper::getValue($this->getBcc(), 'address.email', []);;
+        $bc = ArrayHelper::getValue($this->getBcc(), 'address.email', []);
 
         return $this->getSubject() . ' - Recipients:'
             . ' [TO] ' . implode('; ', $to)
