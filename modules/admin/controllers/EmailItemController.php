@@ -2,7 +2,7 @@
 
 namespace lo\modules\email\modules\admin\controllers;
 
-use lo\modules\email\models\EmailItem;
+use lo\modules\email\modules\admin\models\BackEmailItem;
 use yii\web\Controller;
 use lo\core\actions\crud;
 
@@ -18,7 +18,7 @@ class EmailItemController extends Controller
 
     public function actions()
     {
-        $class = EmailItem::class;
+        $class = BackEmailItem::class;
         return [
             'index'=>[
                 'class'=> crud\Index::class,

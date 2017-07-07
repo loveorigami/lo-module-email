@@ -3,7 +3,7 @@
 namespace lo\modules\email\models;
 
 use lo\core\db\ActiveRecord;
-use lo\modules\email\models\meta\EmailItemMeta;
+use lo\modules\email\models\meta\BackEmailItemMeta;
 
 /**
  * This is the model class for table "email__item".
@@ -40,7 +40,7 @@ class EmailItem extends ActiveRecord
      */
     public function metaClass()
     {
-        return EmailItemMeta::class;
+        return BackEmailItemMeta::class;
     }
 
     public function getCat()
