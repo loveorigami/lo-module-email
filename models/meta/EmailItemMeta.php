@@ -58,7 +58,8 @@ class EmailItemMeta extends MetaFields
                     "isRequired" => true,
                     "data" => [$this, "getCats"], // массив всех категорий (см. выше)
                     "eagerLoading" => true,
-                    "relationName" => "cat" // relation getCat
+                    "relationName" => "cat", // relation getCat
+                    "editInGrid" => true,
                 ],
                 "params" => [$this->owner, "cat_id"]
             ],
