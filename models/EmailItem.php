@@ -3,7 +3,7 @@
 namespace lo\modules\email\models;
 
 use lo\core\db\ActiveRecord;
-use lo\modules\email\models\meta\BackEmailItemMeta;
+use lo\modules\email\models\meta\EmailItemMeta;
 
 /**
  * This is the model class for table "email__item".
@@ -40,13 +40,15 @@ class EmailItem extends ActiveRecord
      */
     public function metaClass()
     {
-        return BackEmailItemMeta::class;
+        return EmailItemMeta::class;
     }
 
+    /**
+     * @return \lo\core\db\ActiveQuery
+     */
     public function getCat()
     {
         return $this->hasOne(EmailCat::class, ['id' => 'cat_id']);
     }
-
 
 }
