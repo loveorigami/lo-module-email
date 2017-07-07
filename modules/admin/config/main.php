@@ -15,6 +15,7 @@ return [
         'singletons' => [
             EmailSettingsInterface::class => [
                 'class' => EmailSettings::class,
+                'cache' => 'cacheCommon',
                 'cachingDuration' => 6000,
             ],
             EmailItemRepositoryInterface::class => EmailItemRepository::class,

@@ -9,9 +9,7 @@ use yii\mail\BaseMessage;
 
 /**
  * Message is a representation of a message that will be consumed by Mailer.
- *
  * Templates are supported and, if used, will override specified content data with template's ones.
- *
  * @link https://developers.sparkpost.com/api/transmissions API Reference
  * @see Mailer
  * @author Ustmaestro <ustmaestro@gmail.com>
@@ -33,6 +31,7 @@ class Message extends BaseMessage
         'content' => '_content',              // array
         'recipients' => '_recipients',           // array
     ];
+
     /**
      * Helper map for composing message options
      * @var array
@@ -47,6 +46,7 @@ class Message extends BaseMessage
         'ip_pool',              // string
         'inline_css',           // boolean
     ];
+
     /**
      * Helper map for composing message content
      * @var array
@@ -65,6 +65,7 @@ class Message extends BaseMessage
         'template_id',              // string
         'use_draft_template',       // string
     ];
+
     /**
      * Helper map for composing attachments and images
      * @var array
@@ -74,6 +75,7 @@ class Message extends BaseMessage
         'name',         // string
         'data',         // string
     ];
+
     private $_options = [];
     private $_campaign_id;
     private $_description;
@@ -154,6 +156,10 @@ class Message extends BaseMessage
         return $this->_return_path;
     }
 
+    /**
+     * @param $content
+     * @return $this
+     */
     public function setContent($content)
     {
         foreach (self::$contentAttributesMap as $key) {
@@ -163,6 +169,9 @@ class Message extends BaseMessage
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getContent()
     {
         return $this->_content;
@@ -191,7 +200,8 @@ class Message extends BaseMessage
     }
 
     /**
-     * Backward compatibility
+     * @param array|string $to
+     * @return $this
      */
     public function setTo($to)
     {
@@ -199,6 +209,7 @@ class Message extends BaseMessage
             $to = $to ? [$to] : [];
         }
         $this->_recipients = $this->normalizeRecipientsEmails($to);
+
         return $this;
     }
 
@@ -513,9 +524,8 @@ class Message extends BaseMessage
     }
 
     /**
-     * Sets the character set of this message.
-     * @param string $charset character set name.
-     * @return $this self reference.
+     * @param string $charset
+     * @throws NotSupportedException
      */
     public function setCharset($charset)
     {
@@ -634,9 +644,16 @@ class Message extends BaseMessage
      */
     public function toString()
     {
+        $to = ArrayHelper::getValue($this->getTo(), 'address.email', []);
+        $cc = ArrayHelper::getValue($this->getCc(), 'address.email', []);
+        $bc = ArrayHelper::getValue($this->getBcc(), 'address.email', []);;
+
+        print_r($to);
+
         return $this->getSubject() . ' - Recipients:'
-            . ' [TO] ' . implode('; ', $this->getTo())
-            . ' [CC] ' . implode('; ', $this->getCc())
-            . ' [BCC] ' . implode('; ', $this->getBcc());
+            . ' [TO] ' . implode('; ', $to)
+            . ' [CC] ' . implode('; ', $cc)
+            . ' [BCC] ' . implode('; ', $bc)
+            ;
     }
 }

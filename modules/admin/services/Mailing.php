@@ -1,23 +1,24 @@
 <?php
 
 namespace lo\modules\email\modules\admin\services;
-use yii\base\Component;
+
+use lo\modules\email\components\sparkpost\Mailer;
 use Yii;
 
 class Mailing implements MailingInterface
 {
     /**
+     * @param string $emailTo send email to user
      * @param $tpl
      * @param $data
-     * @param string $emailTo send email to user
      */
-    public function send($tpl, $data, $emailTo)
+    public function send($emailTo, $tpl, $data)
     {
+        /** @var Mailer $sparkpost */
         $sparkpost = Yii::$app->sparkpost;
-        $sparkpost->compose()
-            ->setTemplateId($tpl)
-            ->setSubstitutionData($data)
+        $sparkpost->compose(['template' => $tpl], $data)
             ->setTo($emailTo)
             ->send();
     }
+
 } 

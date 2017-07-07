@@ -1,4 +1,5 @@
 <?php
+
 use lo\core\widgets\admin\TabMenu;
 use lo\modules\email\models\EmailCat;
 use lo\modules\email\models\EmailTpl;
@@ -11,7 +12,7 @@ use yii\widgets\ActiveForm;
 /**
  * @var yii\web\View $this
  * @var \lo\modules\email\forms\EmailForm $model
- * @var array $data
+ * @var \lo\modules\email\modules\admin\dto\StateDto $data
  */
 $this->title = Yii::t('backend', 'Send emails');
 $this->params['breadcrumbs'][] = $this->title;
@@ -71,8 +72,8 @@ $this->registerJs($js, yii\web\View::POS_END);
 
     <?php
     echo Progress::widget([
-        'percent' => $data['percent'],
-        'label' => $data['percent'] . '%',
+        'percent' => $data->percent,
+        'label' => $data->percent . '%',
         'barOptions' => ['class' => 'progress-bar-success'],
         'options' => ['class' => 'active  progress-striped']
     ]);

@@ -14,6 +14,7 @@ class SendService
 {
     private $emailRepository;
     private $mailing;
+    private $item;
 
     public function __construct(
         EmailItemRepositoryInterface $emailRepository,
@@ -26,20 +27,27 @@ class SendService
 
     /**
      * @param $cat_id
-     * @param $tpl
      * @param $session
      * @return bool|string
      */
-    public function sendEmail($cat_id, $tpl, $session)
+    public function getEmail($cat_id, $session)
     {
-        $item = $this->emailRepository->findByGroupSession($cat_id, $session);
-        if (!$item) return false;
+        $this->item = $this->emailRepository->findByGroupSession($cat_id, $session);
+        return $this->emailRepository->getEmail($this->item);
+    }
 
-        $email = $this->emailRepository->getEmail($item);
-        $this->mailing->send($tpl, [
-            'hash' => $this->emailRepository->getHash($item)
-        ], $email);
+    /**
+     * @param $emailTo
+     * @param $tpl
+     */
+    public function sendEmail($emailTo, $tpl)
+    {
+        $status = $this->mailing->send($emailTo, $tpl, [
+            'hash' => $this->emailRepository->getHash($this->item)
+        ]);
 
-        return $email;
+        if (!$status) {
+            // blocked
+        }
     }
 }

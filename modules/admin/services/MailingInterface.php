@@ -4,10 +4,10 @@ namespace lo\modules\email\modules\admin\services;
 interface MailingInterface
 {
     /**
-     * @param $tpl
-     * @param $substitutionData
      * @param string $emailTo send to user
+     * @param $tpl
+     * @param array $substitutionData
      */
-    public function send($tpl, $substitutionData, $emailTo);
+    public function send($emailTo, $tpl, $substitutionData);
 
 }

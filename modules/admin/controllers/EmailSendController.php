@@ -2,10 +2,11 @@
 
 namespace lo\modules\email\modules\admin\controllers;
 
-use lo\core\helpers\MathHelper;
+use lo\core\helpers\DateHelper;
 use lo\core\actions\crud\Settings;
 use lo\modules\email\adapters\EmailSettingsInterface;
 use lo\modules\email\forms\EmailForm;
+use lo\modules\email\modules\admin\dto\StateDto;
 use lo\modules\email\modules\admin\services\SendService;
 use Yii;
 use yii\web\Controller;
@@ -88,7 +89,7 @@ class EmailSendController extends Controller
     public function actionIndex()
     {
         $model = new EmailForm();
-        $data = $this->checkStatus();
+        $data = $this->checkState();
         return $this->render('index', ['model' => $model, 'data' => $data]);
     }
 
@@ -102,71 +103,53 @@ class EmailSendController extends Controller
         $cat_id = Yii::$app->request->post('cat_id');
         $tpl = Yii::$app->request->post('tpl');
 
-        $status = $this->checkStatus();
+        $state = $this->checkState();
 
-        if ($status['status']) {
-            $status['email'] = $this->sendServive->sendEmail($cat_id, $tpl, $status['session']);
-
-            if (!$status['email']) {
-                $status['text'] = 'Group is empty';
-                $status['status'] = false;
-            }
+        if ($state->isValid()) {
+            $state->email = $this->sendServive->getEmail($cat_id, $state->session);
+            //$state->email = 'loveorigami@mail.ru';
         }
 
-        if ($status['status']) {
-            $this->settings->set(self::COUNT, $status['count'] + 1);
+        if ($state->isValidEmail()) {
+            // тут проверка нужна на статус отправки
+            $this->sendServive->sendEmail($state->email, $tpl);
+            $this->settings->set(self::COUNT, $state->count + 1);
         }
 
         $data = [
-            'status' => $status['status'],
-            'percent' => $status['percent'],
-            'text' => $status['text'],
-            'log' => $this->renderAjax('log', ['data' => $status])
+            'status' => $state->status,
+            'percent' => $state->percent,
+            'text' => $state->text,
+            'log' => $this->renderAjax('log', ['data' => $state])
         ];
 
         return $data;
     }
 
     /**
-     * @return array
+     * @return StateDto
      */
-    private function checkStatus()
+    private function checkState()
     {
-        $status = true;
-        $text = 'Ok';
-        $session = $this->settings->get(self::SESSION);
-        $limit = $this->settings->get(self::LIMIT);
-        $count = $this->settings->get(self::COUNT);
-        $date = $this->settings->get(self::DATE_SEND);
-        $today = date('Y-m-d');
+        $state = StateDto::init(
+            $this->settings->get(self::SESSION),
+            $this->settings->get(self::LIMIT),
+            $this->settings->get(self::COUNT),
+            $this->settings->get(self::DATE_SEND)
+        );
 
-        $data = [
-            'count' => $count,
-            'limit' => $limit,
-            'session' => $session,
-            'date' => $date,
-            'email' => '',
-            'status' => $status,
-            'label' => 'success',
-            'percent' => MathHelper::percent($count, $limit),
-            'text' => $text
-        ];
+        $today = DateHelper::nowDate();
 
-        if ($date >= $today) {
-            $data['text'] = "Finish today limit";
-            $data['label'] = 'danger';
-            $data['status'] = false;
-            return $data;
+        if (!$state->isValidToday($today)) {
+            return $state;
         }
 
-        if ($count >= $limit) {
+        if (!$state->isValidCount()) {
             $this->settings->set(self::DATE_SEND, $today);
             $this->settings->set(self::COUNT, 0);
-            $data['text'] = "Finish today limit $limit";
-            $data['label'] = 'danger';
-            $data['status'] = false;
+            return $state;
         }
 
-        return $data;
+        return $state;
     }
 }
