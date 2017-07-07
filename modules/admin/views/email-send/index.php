@@ -31,7 +31,7 @@ function StartSend(e) {
         cache: false,
         data: {
             cat_id: $('#emailform-cat_id option:selected').val(),
-            tpl: $('#emailform-tpl_id option:selected').val()
+            tpl_id: $('#emailform-tpl_id option:selected').val()
         },
         success: function (data) {
             var value = data['percent'] + '%';

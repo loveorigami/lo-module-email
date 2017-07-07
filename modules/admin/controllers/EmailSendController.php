@@ -19,6 +19,8 @@ use yii\web\Response;
  */
 class EmailSendController extends Controller
 {
+    const CAT_ID = 'email.cat_id';
+    const TPL_ID = 'email.tpl_id';
     const SESSION = 'email.send_session';
     const COUNT = 'email.count';
     const LIMIT = 'email.limit';
@@ -78,6 +80,12 @@ class EmailSendController extends Controller
                             ['date', 'format' => 'php:Y-m-d']
                         ]
                     ],
+                    self::CAT_ID => [
+                        'label' => Yii::t('backend', 'Category'),
+                    ],
+                    self::TPL_ID => [
+                        'label' => Yii::t('backend', 'Template'),
+                    ],
                 ],
             ],
         ];
@@ -89,7 +97,11 @@ class EmailSendController extends Controller
     public function actionIndex()
     {
         $model = new EmailForm();
-        $data = $this->checkState();
+
+        $model->cat_id = $this->settings->get(self::CAT_ID);
+        $model->tpl_id = $this->settings->get(self::TPL_ID);
+
+        $data = $this->checkState($model->cat_id, $model->tpl_id);
         return $this->render('index', ['model' => $model, 'data' => $data]);
     }
 
@@ -100,19 +112,18 @@ class EmailSendController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $cat_id = Yii::$app->request->post('cat_id');
-        $tpl = Yii::$app->request->post('tpl');
+        $cat1 = Yii::$app->request->post('cat_id');
+        $tpl1 = Yii::$app->request->post('tpl_id');
 
-        $state = $this->checkState();
+        $state = $this->checkState($cat1, $tpl1);
 
         if ($state->isValid()) {
-            $state->email = $this->sendServive->getEmail($cat_id, $state->session);
-            //$state->email = 'loveorigami@mail.ru';
+            $state->email = $this->sendServive->getEmail($cat1, $state->session);
         }
 
         if ($state->isValidEmail()) {
             // тут проверка нужна на статус отправки
-            $this->sendServive->sendEmail($state->email, $tpl);
+            $this->sendServive->sendEmail($state->email, $tpl1);
             $this->settings->set(self::COUNT, $state->count + 1);
         }
 
@@ -127,10 +138,22 @@ class EmailSendController extends Controller
     }
 
     /**
+     * @param $cat1
+     * @param $tpl1
      * @return StateDto
      */
-    private function checkState()
+    private function checkState($cat1, $tpl1)
     {
+        $cat2 = $this->settings->get(self::CAT_ID);
+        if ($cat1 != $cat2) {
+            $this->settings->set(self::CAT_ID, $cat1);
+        }
+
+        $tpl2 = $this->settings->get(self::TPL_ID);
+        if ($tpl1 != $tpl2) {
+            $this->settings->set(self::TPL_ID, $tpl1);
+        }
+
         $state = StateDto::init(
             $this->settings->get(self::SESSION),
             $this->settings->get(self::LIMIT),
