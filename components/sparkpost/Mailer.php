@@ -183,7 +183,7 @@ class Mailer extends BaseMailer
     }
 
     /**
-     * @param \yii\mail\MessageInterface $message
+     * @param \yii\mail\MessageInterface|Message $message
      * @return bool
      * @throws \Exception
      */

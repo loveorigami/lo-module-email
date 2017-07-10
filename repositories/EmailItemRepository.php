@@ -59,7 +59,7 @@ class EmailItemRepository implements EmailItemRepositoryInterface
         $item->date_unsubscribe = DateHelper::nowDate();
         $this->save($item);
     }
-    
+
     /**
      * @param EmailItem $item
      */

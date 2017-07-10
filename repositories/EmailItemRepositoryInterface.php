@@ -38,6 +38,11 @@ interface EmailItemRepositoryInterface
 
     /**
      * @param $item
+     */
+    public function unsubscribeAuto($item);
+
+    /**
+     * @param $item
      * @return string
      */
     public function getEmail($item);
