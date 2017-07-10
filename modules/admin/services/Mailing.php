@@ -8,15 +8,16 @@ use Yii;
 class Mailing implements MailingInterface
 {
     /**
-     * @param string $emailTo send email to user
+     * @param string $emailTo
      * @param $tpl
-     * @param $data
+     * @param array $data
+     * @return bool
      */
     public function send($emailTo, $tpl, $data)
     {
         /** @var Mailer $sparkpost */
         $sparkpost = Yii::$app->sparkpost;
-        $sparkpost->compose(['template' => $tpl], $data)
+        return $sparkpost->compose(['template' => $tpl], $data)
             ->setTo($emailTo)
             ->send();
     }

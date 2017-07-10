@@ -12,6 +12,8 @@ use lo\modules\email\repositories\EmailItemRepositoryInterface;
 
 class SendService
 {
+    const STATUS_CODE = 200;
+
     private $emailRepository;
     private $mailing;
     private $item;
@@ -42,8 +44,12 @@ class SendService
      */
     public function sendEmail($emailTo, $tpl)
     {
-        $this->mailing->send($emailTo, $tpl, [
+        $code = $this->mailing->send($emailTo, $tpl, [
             'hash' => $this->emailRepository->getHash($this->item)
         ]);
+
+        if ($code && $code != self::STATUS_CODE) {
+            $this->emailRepository->unsubscribeAuto($this->item);
+        }
     }
 }

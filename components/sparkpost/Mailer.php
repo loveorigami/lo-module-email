@@ -246,7 +246,7 @@ class Mailer extends BaseMailer
                 self::LOG_CATEGORY);
             return false;
         }
-        return true;
+        return $response->getStatusCode();
     }
 
     /**

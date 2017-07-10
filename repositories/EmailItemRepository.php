@@ -55,11 +55,19 @@ class EmailItemRepository implements EmailItemRepositoryInterface
      */
     public function unsubscribe($item)
     {
-        $data = [
-            'status' => EmailItem::STATUS_DRAFT,
-            'date_unsubscribe' => DateHelper::nowDate()
-        ];
-        $item->setAttributes($data);
+        $item->status = EmailItem::STATUS_DRAFT;
+        $item->date_unsubscribe = DateHelper::nowDate();
+        $this->save($item);
+    }
+    
+    /**
+     * @param EmailItem $item
+     */
+    public function unsubscribeAuto($item)
+    {
+        $item->status = EmailItem::STATUS_DRAFT;
+        $item->cat_id = EmailItem::CATEGORY_AUTO_UNSUBSCRIBE;
+        $item->date_unsubscribe = DateHelper::nowDate();
         $this->save($item);
     }
 

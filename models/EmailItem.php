@@ -9,6 +9,7 @@ use lo\modules\email\models\meta\EmailItemMeta;
  * This is the model class for table "email__item".
  *
  * @property integer $id
+ * @property integer $cat_id
  * @property string $email
  * @property string $session_id
  * @property string $date_send
@@ -29,6 +30,7 @@ class EmailItem extends ActiveRecord
     const CATEGORY_COMMENT = 18;
     const CATEGORY_MINISITE = 20;
     const CATEGORY_ORDER = 24;
+    const CATEGORY_AUTO_UNSUBSCRIBE = 30;
 
     /**
      * @inheritdoc
