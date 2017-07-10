@@ -12,6 +12,8 @@ use lo\modules\email\models\meta\EmailItemMeta;
  * @property string $email
  * @property string $session_id
  * @property string $date_send
+ * @property string $date_subscribe
+ * @property string $date_unsubscribe
  * @property integer $status
  * @property integer $hash
  * @property integer $created_at

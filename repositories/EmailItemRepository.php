@@ -56,7 +56,8 @@ class EmailItemRepository implements EmailItemRepositoryInterface
     public function unsubscribe($item)
     {
         $data = [
-            'status' => EmailItem::STATUS_DRAFT
+            'status' => EmailItem::STATUS_DRAFT,
+            'date_unsubscribe' => DateHelper::nowDate()
         ];
         $item->setAttributes($data);
         $this->save($item);
