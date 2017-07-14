@@ -1,4 +1,5 @@
 <?php
+
 namespace lo\modules\email\models\meta;
 
 use lo\modules\email\models\EmailCat;
@@ -36,6 +37,7 @@ class EmailItemMeta extends MetaFields
         $models = EmailCat::find()->published()->orderBy(["name" => SORT_ASC])->asArray()->all();
         return ArrayHelper::map($models, "id", "name");
     }
+
     /**
      * @inheritdoc
      */
@@ -74,6 +76,17 @@ class EmailItemMeta extends MetaFields
                     "editInGrid" => true,
                 ],
                 "params" => [$this->owner, "cat_id"]
+            ],
+
+            "session_id" => [
+                "definition" => [
+                    "class" => fields\TextField::class,
+                    "title" => Yii::t('backend', 'Session'),
+                    "showInGrid" => true,
+                    "showInFilter" => true,
+                    "isRequired" => false,
+                ],
+                "params" => [$this->owner, "session_id"]
             ],
 
             "hash" => [
