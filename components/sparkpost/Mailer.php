@@ -72,7 +72,6 @@ class Mailer extends BaseMailer
      * If the development mode is disabled, Mailer will fail gracefully.
      * @var bool
      */
-
     public $developmentMode = true;
 
     /**@inheritdoc */
@@ -208,15 +207,7 @@ class Mailer extends BaseMailer
             }
         }
 
-        // Transmission wasn't sent.
-        \Yii::error("An error occurred in mailer: {$this->lastError->getMessage()}, code: {$this->lastError->getCode()}, api message: \"{$this->lastError->getMessage()}\"",
-            self::LOG_CATEGORY);
-
-        if ($this->developmentMode) {
-            throw $this->lastError;
-        } else {
-            return false;
-        }
+        return $this->setError();
     }
 
     /**
@@ -246,6 +237,7 @@ class Mailer extends BaseMailer
                 self::LOG_CATEGORY);
             return false;
         }
+
         return $response->getStatusCode();
     }
 
@@ -255,5 +247,44 @@ class Mailer extends BaseMailer
     public function getSparky()
     {
         return $this->_sparky;
+    }
+
+    /*
+     * @return bool
+     */
+    public function getBounces($date_from, $date_to)
+    {
+        $promise = $this->_sparky->request('GET', 'message-events', [
+            'events' => 'bounce,delay,policy_rejection,out_of_band,generation_failure,generation_rejection,spam_complaint,list_unsubscribe,link_unsubscribe',
+            'from' => $date_from,
+            'to' => $date_to,
+        ]);
+
+        try {
+            $response = $promise->wait();
+            $data = $response->getBody();
+            return ArrayHelper::getValue($data, 'results', []);
+        } catch (SparkPostException $e) {
+            $this->lastError = $e;
+        }
+
+        return $this->setError();
+    }
+
+    /**
+     * @return bool
+     * @throws \Exception
+     */
+    protected function setError()
+    {
+        // Transmission wasn't sent.
+        \Yii::error("An error occurred in mailer: {$this->lastError->getMessage()}, code: {$this->lastError->getCode()}, api message: \"{$this->lastError->getMessage()}\"",
+            self::LOG_CATEGORY);
+
+        if ($this->developmentMode) {
+            throw $this->lastError;
+        } else {
+            return false;
+        }
     }
 }

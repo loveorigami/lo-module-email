@@ -15,6 +15,18 @@ use yii\helpers\ArrayHelper;
  */
 class EmailItemMeta extends MetaFields
 {
+    const SPARKPOST_TAB = "SparkPost";
+
+    /**
+     * @inheritdoc
+     */
+    public function tabs()
+    {
+        $tabs = parent::tabs();
+        $tabs[self::SPARKPOST_TAB] = Yii::t('backend', "SparkPost");
+        return $tabs;
+    }
+
     /**
      * Возвращает массив для привязки к категории
      * @return array
@@ -106,6 +118,78 @@ class EmailItemMeta extends MetaFields
                     "isRequired" => false,
                 ],
                 "params" => [$this->owner, "date_unsubscribe"]
+            ],
+
+            "sp_raw_reason" => [
+                "definition" => [
+                    "class" => fields\TextAreaField::class,
+                    "title" => Yii::t('backend', 'Reason'),
+                    "showInGrid" => false,
+                    "showInFilter" => false,
+                    "isRequired" => false,
+                    "tab" => self::SPARKPOST_TAB,
+                ],
+                "params" => [$this->owner, "sp_raw_reason"]
+            ],
+
+            "sp_bounce_class" => [
+                "definition" => [
+                    "class" => fields\NumberField::class,
+                    "title" => Yii::t('backend', 'Bounce class'),
+                    "showInGrid" => false,
+                    "showInFilter" => true,
+                    "isRequired" => false,
+                    "tab" => self::SPARKPOST_TAB,
+                ],
+                "params" => [$this->owner, "sp_bounce_class"]
+            ],
+
+            "sp_error_code" => [
+                "definition" => [
+                    "class" => fields\NumberField::class,
+                    "title" => Yii::t('backend', 'Error Code'),
+                    "showInGrid" => false,
+                    "showInFilter" => true,
+                    "isRequired" => false,
+                    "tab" => self::SPARKPOST_TAB,
+                ],
+                "params" => [$this->owner, "sp_error_code"]
+            ],
+
+            "sp_transmission_id" => [
+                "definition" => [
+                    "class" => fields\TextField::class,
+                    "title" => Yii::t('backend', 'Transmission Id'),
+                    "showInGrid" => false,
+                    "showInFilter" => true,
+                    "isRequired" => false,
+                    "tab" => self::SPARKPOST_TAB,
+                ],
+                "params" => [$this->owner, "sp_transmission_id"]
+            ],
+
+            "sp_timestamp" => [
+                "definition" => [
+                    "class" => fields\TextField::class,
+                    "title" => Yii::t('backend', 'Timestamp'),
+                    "showInGrid" => false,
+                    "showInFilter" => true,
+                    "isRequired" => false,
+                    "tab" => self::SPARKPOST_TAB,
+                ],
+                "params" => [$this->owner, "sp_timestamp"]
+            ],
+
+            "sp_type" => [
+                "definition" => [
+                    "class" => fields\TextField::class,
+                    "title" => Yii::t('backend', 'Type'),
+                    "showInGrid" => true,
+                    "showInFilter" => true,
+                    "isRequired" => false,
+                    "tab" => self::SPARKPOST_TAB,
+                ],
+                "params" => [$this->owner, "sp_type"]
             ],
         ];
     }

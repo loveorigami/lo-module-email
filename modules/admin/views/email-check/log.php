@@ -4,6 +4,5 @@
  */
 
 //d($data);
-d($data['results']);
-d($data['total_count']);
-d($data['links']);
+//d($data['results']);
+print_r($data);

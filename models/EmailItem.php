@@ -19,6 +19,13 @@ use lo\modules\email\models\meta\EmailItemMeta;
  * @property integer $hash
  * @property integer $created_at
  * @property integer $updated_at
+ *
+ * @property integer $sp_bounce_class
+ * @property integer $sp_error_code
+ * @property string $sp_raw_reason
+ * @property string $sp_transmission_id
+ * @property string $sp_timestamp
+ * @property string $sp_type
  */
 class EmailItem extends ActiveRecord
 {

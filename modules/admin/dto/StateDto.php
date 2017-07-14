@@ -2,8 +2,6 @@
 
 namespace lo\modules\email\modules\admin\dto;
 
-use lo\core\helpers\MathHelper;
-
 class StateDto
 {
     const LABEL_SUCCESS = 'success';
