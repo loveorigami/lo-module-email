@@ -1,19 +1,18 @@
 <?php
 use lo\core\widgets\admin\Grid;
 use lo\core\widgets\admin\CrudLinks;
-use lo\core\widgets\admin\TabMenu;
-use lo\widgets\modal\Modal;
 
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
+ * @var \lo\modules\email\models\EmailTpl $searchModel
  */
 $this->title = Yii::t('backend', 'Emails Tpl');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="page-index">
     <?php
-    echo TabMenu::widget();
+    echo $this->render('/_menu');
     echo CrudLinks::widget(["action" => CrudLinks::CRUD_LIST, "model" => $searchModel]);
 
     echo $this->render('_filter', ['model' => $searchModel]);
@@ -23,5 +22,4 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $searchModel,
     ]);
     ?>
-
 </div>

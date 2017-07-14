@@ -1,6 +1,4 @@
 <?php
-
-use lo\core\widgets\admin\TabMenu;
 use lo\modules\email\models\EmailCat;
 use lo\modules\email\models\EmailTpl;
 use lo\widgets\modal\ModalAjax;
@@ -14,6 +12,7 @@ use yii\widgets\ActiveForm;
  * @var \lo\modules\email\forms\EmailForm $model
  * @var \lo\modules\email\modules\admin\dto\StateDto $data
  */
+
 $this->title = Yii::t('backend', 'Send emails');
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -63,7 +62,7 @@ $this->registerJs($js, yii\web\View::POS_END);
         'options' => ['class' => 'header-primary'],
         'autoClose' => true,
     ]);
-    echo TabMenu::widget();
+    echo $this->render('/_menu');
 
     $categories = EmailCat::find()->select(['name', 'id'])->indexBy('id')->orderBy('name')->column();
     $templates = ArrayHelper::map(EmailTpl::find()->published()->asArray()->orderBy("name")->all(), 'name', 'name');

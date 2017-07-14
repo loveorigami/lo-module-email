@@ -30,7 +30,7 @@ class EmailSendController extends Controller
     private $settings;
 
     /** @var SendService */
-    private $sendServive;
+    private $sendService;
 
     /**
      * EmailSendController constructor.
@@ -43,7 +43,7 @@ class EmailSendController extends Controller
     public function __construct($id, $module, EmailSettingsInterface $settings, SendService $service, $config = [])
     {
         $this->settings = $settings;
-        $this->sendServive = $service;
+        $this->sendService = $service;
         parent::__construct($id, $module, $config);
     }
 
@@ -118,12 +118,12 @@ class EmailSendController extends Controller
         $state = $this->checkState($cat1, $tpl1);
 
         if ($state->isValid()) {
-            $state->email = $this->sendServive->getEmail($cat1, $state->session);
+            $state->email = $this->sendService->getEmail($cat1, $state->session);
         }
 
         if ($state->isValidEmail()) {
             // тут проверка нужна на статус отправки
-            $this->sendServive->sendEmail($state->email, $tpl1);
+            $this->sendService->sendEmail($state->email, $tpl1);
             $this->settings->set(self::COUNT, $state->count + 1);
         }
 

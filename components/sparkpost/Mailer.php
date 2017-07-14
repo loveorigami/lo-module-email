@@ -76,7 +76,7 @@ class Mailer extends BaseMailer
     public $developmentMode = true;
 
     /**@inheritdoc */
-    public $messageClass = 'lo\modules\email\components\sparkpost\Message';
+    public $messageClass = 'modules\email\components\sparkpost\Message';
 
     /** @var int amount of sent messages last 'sendMessage' call */
     public $sentCount = 0;
