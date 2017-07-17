@@ -87,7 +87,7 @@ class EmailCheckController extends Controller
         $state = $this->checkState($date);
 
         if ($state->isValid()) {
-            $this->checkService->unsubscribeBouncesList($date);
+            $this->checkService->messageEventsList($date);
         }
 
         $data = [

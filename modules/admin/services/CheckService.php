@@ -29,27 +29,23 @@ class CheckService
     /**
      * @param $date
      */
-    public function unsubscribeBouncesList($date)
+    public function messageEventsList($date)
     {
-        /**
-         * поля
-         * raw_reason - причина отказа
-         * raw_rcpt_to - кому отправлял
-         * bounce_class - тип отказа числовой
-         * error_code - код ошибки
-         * type - тип отказа
-         * 'transmission_id'
-         * 'timestamp'
-         */
-        $date_from = $date . 'T08:00';
-        $date_to = DateHelper::rangeDateByDays(1, $date) . 'T08:00';
-        $data = $this->mailing->getBouncesList($date_from, $date_to);
+        $date_from = $date;
+        $date_to = DateHelper::rangeDateByDays(1, $date);
+        $data1 = $this->mailing->getBouncesList($date_from, $date_to);
 
-        foreach ($data as $bounce) {
-            $msg = MessageEventDto::init($bounce);
+        foreach ($data1 as $result) {
+            $msg = MessageEventDto::init($result);
             $item = $this->emailRepository->findByEmail($msg->email);
             $this->emailRepository->unsubscribeBounce($item, $msg);
         }
 
+        $data2 = $this->mailing->getOpenList($date_from, $date_to);
+        foreach ($data2 as $result) {
+            $msg = MessageEventDto::init($result);
+            $item = $this->emailRepository->findByEmail($msg->email);
+            $this->emailRepository->subscribeOpen($item, $msg);
+        }
     }
 }

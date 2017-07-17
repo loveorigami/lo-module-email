@@ -94,6 +94,23 @@ class EmailItemRepository implements EmailItemRepositoryInterface
 
     /**
      * @param EmailItem $item
+     * @param MessageEventDto $msg
+     */
+    public function subscribeOpen($item, MessageEventDto $msg)
+    {
+        if ($item && $item->status == EmailItem::STATUS_PUBLISHED) {
+            $item->sp_timestamp = $msg->timestamp;
+            $item->sp_raw_reason = $msg->raw_reason;
+            $item->sp_bounce_class = $msg->bounce_class;
+            $item->sp_error_code = $msg->error_code;
+            $item->sp_transmission_id = $msg->transmission_id;
+            $item->sp_type = $msg->type;
+            $this->save($item);
+        }
+    }
+
+    /**
+     * @param EmailItem $item
      * @return string
      */
     public function getEmail($item = null)

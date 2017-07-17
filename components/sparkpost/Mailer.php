@@ -75,7 +75,7 @@ class Mailer extends BaseMailer
     public $developmentMode = true;
 
     /**@inheritdoc */
-    public $messageClass = 'modules\email\components\sparkpost\Message';
+    public $messageClass = 'lo\modules\email\components\sparkpost\Message';
 
     /** @var int amount of sent messages last 'sendMessage' call */
     public $sentCount = 0;
@@ -252,12 +252,34 @@ class Mailer extends BaseMailer
     /*
      * @return bool
      */
-    public function getBounces($date_from, $date_to)
+    public function getBouncesList($date_from, $date_to)
     {
         $promise = $this->_sparky->request('GET', 'message-events', [
             'events' => 'bounce,delay,policy_rejection,out_of_band,generation_failure,generation_rejection,spam_complaint,list_unsubscribe,link_unsubscribe',
-            'from' => $date_from,
-            'to' => $date_to,
+            'from' => $date_from . 'T08:00',
+            'to' => $date_to . 'T08:00',
+        ]);
+
+        try {
+            $response = $promise->wait();
+            $data = $response->getBody();
+            return ArrayHelper::getValue($data, 'results', []);
+        } catch (SparkPostException $e) {
+            $this->lastError = $e;
+        }
+
+        return $this->setError();
+    }
+
+    /*
+ * @return bool
+ */
+    public function getOpenList($date_from, $date_to)
+    {
+        $promise = $this->_sparky->request('GET', 'message-events', [
+            'events' => 'click,open',
+            'from' => $date_from . 'T08:00',
+            'to' => $date_to . 'T08:00',
         ]);
 
         try {

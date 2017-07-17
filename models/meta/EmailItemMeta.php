@@ -3,6 +3,7 @@
 namespace lo\modules\email\models\meta;
 
 use lo\modules\email\models\EmailCat;
+use lo\modules\email\models\EmailItem;
 use Yii;
 use lo\core\db\MetaFields;
 use lo\core\db\fields;
@@ -36,6 +37,21 @@ class EmailItemMeta extends MetaFields
     {
         $models = EmailCat::find()->published()->orderBy(["name" => SORT_ASC])->asArray()->all();
         return ArrayHelper::map($models, "id", "name");
+    }
+
+    /**
+     * Возвращает массив для привязки к категории
+     * @return array
+     */
+    public function getTypes()
+    {
+        $models = EmailItem::find()
+            ->select(['sp_type'])
+            ->distinct()
+            ->orderBy(["sp_type" => SORT_ASC])
+            ->asArray()
+            ->all();
+        return ArrayHelper::map($models, "sp_type", "sp_type");
     }
 
     /**
@@ -195,8 +211,9 @@ class EmailItemMeta extends MetaFields
 
             "sp_type" => [
                 "definition" => [
-                    "class" => fields\TextField::class,
+                    "class" => fields\ListField::class,
                     "title" => Yii::t('backend', 'Type'),
+                    "data" => [$this, 'getTypes'],
                     "showInGrid" => true,
                     "showInFilter" => true,
                     "isRequired" => false,

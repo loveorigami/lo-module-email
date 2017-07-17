@@ -5,7 +5,10 @@
  * Date: 004 04.11.16
  * Time: 10:19
  */
+
 namespace lo\modules\email\repositories;
+
+use lo\modules\email\modules\admin\dto\MessageEventDto;
 
 /**
  * Class EmailItemRepository
@@ -40,6 +43,20 @@ interface EmailItemRepositoryInterface
      * @param $item
      */
     public function unsubscribeAuto($item);
+
+    /**
+     * @param $item
+     * @param $msg
+     * @return mixed
+     */
+    public function unsubscribeBounce($item, MessageEventDto $msg);
+
+    /**
+     * @param $item
+     * @param $msg
+     * @return mixed
+     */
+    public function subscribeOpen($item, MessageEventDto $msg);
 
     /**
      * @param $item
