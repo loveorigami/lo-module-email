@@ -11,7 +11,7 @@ use lo\modules\email\modules\admin\dto\MessageEventDto;
  * @package lo\modules\email\repositories
  * @author Lukyanov Andrey <loveorigami@mail.ru>
  */
-class EmailItemRepository implements EmailItemRepositoryInterface
+class EmailItemRepository
 {
     const CATEGORY_CONTACT = EmailItem::CATEGORY_CONTACT;
     const CATEGORY_ORDER = EmailItem::CATEGORY_ORDER;
@@ -159,7 +159,9 @@ class EmailItemRepository implements EmailItemRepositoryInterface
     public function findByEmail($email)
     {
         $item = EmailItem::find()
-            ->where(['email' => $email])->limit(1)->one();
+            ->where(['email' => $email])
+            ->limit(1)
+            ->one();
 
         return $item;
     }

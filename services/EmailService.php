@@ -9,14 +9,14 @@
 namespace lo\modules\email\services;
 
 use lo\core\exceptions\FlashErrorException;
-use lo\modules\email\repositories\EmailItemRepositoryInterface;
+use lo\modules\email\repositories\EmailItemRepository;
 
 class EmailService
 {
     private $emailRepository;
 
     public function __construct(
-        EmailItemRepositoryInterface $emailRepository
+        EmailItemRepository $emailRepository
     )
     {
         $this->emailRepository = $emailRepository;
@@ -36,6 +36,7 @@ class EmailService
      */
     public function unsubscribeByEmail($email)
     {
+        /** @var \lo\modules\email\models\EmailItem $item */
         $item = $this->emailRepository->findBySubscribeEmail($email);
         if (!$item) {
             throw new FlashErrorException('E-mail отсутсвует в базе данных');

@@ -8,7 +8,7 @@
 
 namespace lo\modules\email\modules\admin\services;
 
-use lo\modules\email\repositories\EmailItemRepositoryInterface;
+use lo\modules\email\repositories\EmailItemRepository;
 
 class SendService
 {
@@ -19,7 +19,7 @@ class SendService
     private $item;
 
     public function __construct(
-        EmailItemRepositoryInterface $emailRepository,
+        EmailItemRepository $emailRepository,
         MailingInterface $mailing
     )
     {

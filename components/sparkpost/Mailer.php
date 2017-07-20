@@ -272,8 +272,9 @@ class Mailer extends BaseMailer
     }
 
     /*
- * @return bool
- */
+     * @return bool
+     * @see https://developer.sparkpost.com/api/message-events.html
+     */
     public function getOpenList($date_from, $date_to)
     {
         $promise = $this->_sparky->request('GET', 'message-events', [
@@ -286,6 +287,30 @@ class Mailer extends BaseMailer
             $response = $promise->wait();
             $data = $response->getBody();
             return ArrayHelper::getValue($data, 'results', []);
+        } catch (SparkPostException $e) {
+            $this->lastError = $e;
+        }
+
+        return $this->setError();
+    }
+
+    /*
+     * @return bool
+     * @see https://developer.sparkpost.com/api/metrics.html#metrics-deliverability-metrics-get
+     */
+    public function getMetricsList($date_from, $date_to)
+    {
+        /** time-series,  */
+        $promise = $this->_sparky->request('GET', 'metrics/deliverability', [
+            'from' => $date_from . 'T08:00',
+            'to' => $date_to . 'T08:00',
+            'metrics' => 'count_injected,count_bounce,count_rejected,count_delivered,count_delivered_first,count_delivered_subsequent,total_delivery_time_first,total_delivery_time_subsequent,total_msg_volume,count_policy_rejection,count_generation_rejection,count_generation_failed,count_inband_bounce,count_outofband_bounce,count_soft_bounce,count_hard_bounce,count_block_bounce,count_admin_bounce,count_undetermined_bounce,count_delayed,count_delayed_first,count_rendered,count_unique_rendered,count_unique_confirmed_opened,count_clicked,count_unique_clicked,count_targeted,count_sent,count_accepted,count_spam_complaint'
+        ]);
+
+        try {
+            $response = $promise->wait();
+            $data = $response->getBody();
+            return ArrayHelper::getValue($data, 'results.0', []);
         } catch (SparkPostException $e) {
             $this->lastError = $e;
         }

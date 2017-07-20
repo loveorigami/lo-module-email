@@ -46,4 +46,16 @@ class Mailing implements MailingInterface
         return $sparkpost->getOpenList($date_from, $date_to);
     }
 
+    /**
+     * @param $date_from
+     * @param $date_to
+     * @return array|bool
+     */
+    public function getMetricsList($date_from, $date_to)
+    {
+        /** @var Mailer $sparkpost */
+        $sparkpost = Yii::$app->sparkpost;
+        return $sparkpost->getMetricsList($date_from, $date_to);
+    }
+
 } 

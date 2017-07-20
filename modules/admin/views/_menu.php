@@ -28,5 +28,19 @@ echo Nav::widget([
             'label' => \Yii::t('backend', 'Check emails'),
             'url' => ['/email/email-check/index'],
         ],
+        [
+            'label' => \Yii::t('backend', 'Log'),
+            'url' => ['/email/email-log/index'],
+            'items' => [
+                [
+                    'label' => \Yii::t('backend', 'List'),
+                    'url' => ['/email/email-log/index'],
+                ],
+                [
+                    'label' => \Yii::t('backend', 'Load'),
+                    'url' => ['/email/email-log/logger'],
+                ]
+            ]
+        ],
     ]
 ]);

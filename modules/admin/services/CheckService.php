@@ -10,7 +10,7 @@ namespace lo\modules\email\modules\admin\services;
 
 use lo\core\helpers\DateHelper;
 use lo\modules\email\modules\admin\dto\MessageEventDto;
-use lo\modules\email\repositories\EmailItemRepositoryInterface;
+use lo\modules\email\repositories\EmailItemRepository;
 
 class CheckService
 {
@@ -18,7 +18,7 @@ class CheckService
     private $mailing;
 
     public function __construct(
-        EmailItemRepositoryInterface $emailRepository,
+        EmailItemRepository $emailRepository,
         MailingInterface $mailing
     )
     {
@@ -37,6 +37,7 @@ class CheckService
 
         foreach ($data1 as $result) {
             $msg = MessageEventDto::init($result);
+            /** @var \lo\modules\email\models\EmailItem $item */
             $item = $this->emailRepository->findByEmail($msg->email);
             $this->emailRepository->unsubscribeBounce($item, $msg);
         }

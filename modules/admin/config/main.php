@@ -18,7 +18,6 @@ return [
                 'cache' => 'cacheCommon',
                 'cachingDuration' => 6000,
             ],
-            EmailItemRepositoryInterface::class => EmailItemRepository::class,
             MailingInterface::class =>  Mailing::class
         ],
     ],

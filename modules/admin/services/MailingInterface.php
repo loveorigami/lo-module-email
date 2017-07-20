@@ -13,15 +13,22 @@ interface MailingInterface
     /**
      * @param $date_from
      * @param $date_to
-     * @return mixed
+     * @return array
      */
     public function getBouncesList($date_from, $date_to);
 
     /**
      * @param $date_from
      * @param $date_to
-     * @return mixed
+     * @return array
      */
     public function getOpenList($date_from, $date_to);
+
+    /**
+     * @param $date_from
+     * @param $date_to
+     * @return array
+     */
+    public function getMetricsList($date_from, $date_to);
 
 }

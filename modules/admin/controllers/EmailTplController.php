@@ -17,7 +17,6 @@ class EmailTplController extends Controller
      * Действия
      * @return array
      */
-
     public function actions()
     {
         $class = EmailTpl::class;
