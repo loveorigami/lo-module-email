@@ -256,8 +256,8 @@ class Mailer extends BaseMailer
     {
         $promise = $this->_sparky->request('GET', 'message-events', [
             'events' => 'bounce,delay,policy_rejection,out_of_band,generation_failure,generation_rejection,spam_complaint,list_unsubscribe,link_unsubscribe',
-            'from' => $date_from . 'T08:00',
-            'to' => $date_to . 'T08:00',
+            'from' => $date_from . 'T00:00',
+            'to' => $date_to . 'T00:00',
         ]);
 
         try {
@@ -279,8 +279,8 @@ class Mailer extends BaseMailer
     {
         $promise = $this->_sparky->request('GET', 'message-events', [
             'events' => 'click,open',
-            'from' => $date_from . 'T08:00',
-            'to' => $date_to . 'T08:00',
+            'from' => $date_from . 'T00:00',
+            'to' => $date_to . 'T00:00',
         ]);
 
         try {
@@ -302,8 +302,8 @@ class Mailer extends BaseMailer
     {
         /** time-series,  */
         $promise = $this->_sparky->request('GET', 'metrics/deliverability', [
-            'from' => $date_from . 'T08:00',
-            'to' => $date_to . 'T08:00',
+            'from' => $date_from . 'T00:00',
+            'to' => $date_to . 'T00:00',
             'metrics' => 'count_injected,count_bounce,count_rejected,count_delivered,count_delivered_first,count_delivered_subsequent,total_delivery_time_first,total_delivery_time_subsequent,total_msg_volume,count_policy_rejection,count_generation_rejection,count_generation_failed,count_inband_bounce,count_outofband_bounce,count_soft_bounce,count_hard_bounce,count_block_bounce,count_admin_bounce,count_undetermined_bounce,count_delayed,count_delayed_first,count_rendered,count_unique_rendered,count_unique_confirmed_opened,count_clicked,count_unique_clicked,count_targeted,count_sent,count_accepted,count_spam_complaint'
         ]);
 
