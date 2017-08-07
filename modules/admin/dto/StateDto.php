@@ -2,6 +2,8 @@
 
 namespace lo\modules\email\modules\admin\dto;
 
+use lo\core\helpers\DateHelper;
+
 class StateDto
 {
     const LABEL_SUCCESS = 'success';
@@ -63,12 +65,27 @@ class StateDto
     }
 
     /**
+     * @param $emails
+     * @return bool
+     */
+    public function isValidCountEmails($emails)
+    {
+        if (!count($emails)) {
+            $this->text = 'Group is empty';
+            $this->status = false;
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * @param $date
      * @return bool
      */
     public function isValidToday($date)
     {
-        if ($this->lastSend >= $date) {
+        $days = DateHelper::rangeDays($this->lastSend, $date);
+        if (!$days) {
             $this->text = "Finish today limit";
             $this->label = self::LABEL_DANGER;
             $this->status = false;

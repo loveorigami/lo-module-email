@@ -25,6 +25,7 @@ class EmailSendController extends Controller
     const COUNT = 'email.count';
     const LIMIT = 'email.limit';
     const DATE_SEND = 'email.date_send';
+    const ONCE_LIMIT = 'email.once_limit';
 
     /** @var EmailSettingsInterface */
     private $settings;
@@ -74,10 +75,16 @@ class EmailSendController extends Controller
                             ['integer'],
                         ]
                     ],
+                    self::ONCE_LIMIT => [
+                        'label' => Yii::t('backend', 'Once limit'),
+                        'rules' => [
+                            ['integer'],
+                        ]
+                    ],
                     self::DATE_SEND => [
                         'label' => Yii::t('backend', 'Last date send'),
                         'rules' => [
-                            ['date', 'format' => 'php:Y-m-d']
+                            ['date', 'format' => 'php:Y-m-d H:i:s']
                         ]
                     ],
                     self::CAT_ID => [
@@ -115,16 +122,19 @@ class EmailSendController extends Controller
         $cat1 = Yii::$app->request->post('cat_id');
         $tpl1 = Yii::$app->request->post('tpl_id');
 
+
         $state = $this->checkState($cat1, $tpl1);
+        $emails = [];
 
         if ($state->isValid()) {
-            $state->email = $this->sendService->getEmail($cat1, $state->session);
+            $once_limit = $this->settings->get(self::ONCE_LIMIT);
+            $emails = $this->sendService->getEmails($cat1, $state->session, $once_limit);
         }
 
-        if ($state->isValidEmail()) {
+        if ($state->isValidCountEmails($emails)) {
             // тут проверка нужна на статус отправки
-            $this->sendService->sendEmail($state->email, $tpl1);
-            $this->settings->set(self::COUNT, $state->count + 1);
+            $this->sendService->sendEmails($emails, $tpl1, $state->session);
+            $this->settings->set(self::COUNT, $state->count + count($emails));
         }
 
         $data = [
@@ -161,7 +171,7 @@ class EmailSendController extends Controller
             $this->settings->get(self::DATE_SEND)
         );
 
-        $today = DateHelper::nowDate();
+        $today = DateHelper::nowDatetime();
 
         if (!$state->isValidToday($today)) {
             return $state;

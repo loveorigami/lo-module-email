@@ -81,6 +81,7 @@ class Message extends BaseMessage
     private $_description;
     private $_metadata = [];
     private $_substitution_data = [];
+    private $_substitution_data_keys = [];
     private $_return_path;
     private $_content = [];
     private $_recipients = [];
@@ -143,6 +144,27 @@ class Message extends BaseMessage
     public function getSubstitutionData()
     {
         return $this->_substitution_data;
+    }
+
+    public function setSubstitutionDataKeys($data)
+    {
+        $this->_substitution_data_keys = $data;
+        return $this;
+    }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    public function getSubstitutionDataByKey($data)
+    {
+        $item = [];
+        foreach ($this->_substitution_data_keys as $key) {
+            if (isset($data[$key])) {
+                $item[$key] = $data[$key];
+            }
+        }
+        return $item;
     }
 
     public function setReturnPath($return_path)
@@ -209,7 +231,6 @@ class Message extends BaseMessage
             $to = $to ? [$to] : [];
         }
         $this->_recipients = $this->normalizeRecipientsEmails($to);
-
         return $this;
     }
 
@@ -462,16 +483,19 @@ class Message extends BaseMessage
     private function normalizeRecipientsEmails($emails)
     {
         $addresses = [];
-        foreach ($emails as $email => $name) {
-            $name = trim($name);
-            if (is_int($email)) {
-                $email = $name;
+        foreach ($emails as $key => $data) {
+            if (is_int($key) && is_array($data)) {
                 $addresses[] = [
-                    'address' => ['email' => $email]
+                    'address' => ['email' => $data['email']],
+                    'substitution_data' => $this->getSubstitutionDataByKey($data)
+                ];
+            } elseif (is_int($key) && !is_array($data)) {
+                $addresses[] = [
+                    'address' => ['email' => $data],
                 ];
             } else {
                 $addresses[] = [
-                    'address' => ['email' => $email, 'name' => $name]
+                    'address' => ['email' => $key, 'name' => $data]
                 ];
             }
         }
@@ -651,7 +675,6 @@ class Message extends BaseMessage
         return $this->getSubject() . ' - Recipients:'
             . ' [TO] ' . implode('; ', $to)
             . ' [CC] ' . implode('; ', $cc)
-            . ' [BCC] ' . implode('; ', $bc)
-            ;
+            . ' [BCC] ' . implode('; ', $bc);
     }
 }

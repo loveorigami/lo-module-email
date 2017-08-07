@@ -2,6 +2,7 @@
 
 namespace lo\modules\email\repositories;
 
+use lo\core\helpers\ArrayHelper;
 use lo\core\helpers\DateHelper;
 use lo\modules\email\models\EmailItem;
 use lo\modules\email\modules\admin\dto\MessageEventDto;
@@ -153,6 +154,27 @@ class EmailItemRepository
     }
 
     /**
+     * @param $cat_id
+     * @param $session
+     * @param $limit
+     * @return array
+     */
+    public function findEmailsByGroupSession($cat_id, $session, $limit)
+    {
+        $items = EmailItem::find()
+            ->where(['cat_id' => $cat_id])
+            ->andWhere(['not', ['session_id' => $session]])
+            ->orderBy(['date_send' => SORT_ASC])
+            ->published()
+            ->limit($limit)
+            ->indexBy('id')
+            ->asArray()
+            ->all();
+
+        return $items;
+    }
+
+    /**
      * @param $email
      * @return array|null|\yii\db\ActiveRecord
      */
@@ -208,5 +230,28 @@ class EmailItemRepository
         $this->add($item);
 
         return $item;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSubstitutionDataKeys()
+    {
+        return ['hash'];
+    }
+
+    /**
+     * @param $emails
+     * @param $session
+     */
+    public function sendEmails($emails, $session)
+    {
+        if ($emails) {
+            $ids = ArrayHelper::getColumn($emails, 'id');
+            EmailItem::updateAll([
+                'session_id' => $session,
+                'date_send' => DateHelper::nowDate(),
+            ], ['id' => $ids]);
+        }
     }
 }

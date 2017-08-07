@@ -12,11 +12,8 @@ use lo\modules\email\repositories\EmailItemRepository;
 
 class SendService
 {
-    const STATUS_CODE = 200;
-
     private $emailRepository;
     private $mailing;
-    private $item;
 
     public function __construct(
         EmailItemRepository $emailRepository,
@@ -30,26 +27,22 @@ class SendService
     /**
      * @param $cat_id
      * @param $session
-     * @return bool|string
+     * @param int $limit
+     * @return array
      */
-    public function getEmail($cat_id, $session)
+    public function getEmails($cat_id, $session, $limit = 10)
     {
-        $this->item = $this->emailRepository->findByGroupSession($cat_id, $session);
-        return $this->emailRepository->getEmail($this->item);
+        return $this->emailRepository->findEmailsByGroupSession($cat_id, $session, $limit);
     }
 
     /**
-     * @param $emailTo
+     * @param $emails
      * @param $tpl
+     * @param $session
      */
-    public function sendEmail($emailTo, $tpl)
+    public function sendEmails($emails, $tpl, $session)
     {
-        $code = $this->mailing->send($emailTo, $tpl, [
-            'hash' => $this->emailRepository->getHash($this->item)
-        ]);
-
-        if ($code && $code != self::STATUS_CODE) {
-            $this->emailRepository->unsubscribeAuto($this->item);
-        }
+        $this->emailRepository->sendEmails($emails, $session);
+        $this->mailing->send($emails, $tpl, $this->emailRepository->getSubstitutionDataKeys());
     }
 }
