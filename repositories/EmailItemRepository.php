@@ -2,7 +2,6 @@
 
 namespace lo\modules\email\repositories;
 
-use lo\core\helpers\ArrayHelper;
 use lo\core\helpers\DateHelper;
 use lo\modules\email\models\EmailItem;
 use lo\modules\email\modules\admin\dto\MessageEventDto;
@@ -247,7 +246,7 @@ class EmailItemRepository
     public function sendEmails($emails, $session)
     {
         if ($emails) {
-            $ids = ArrayHelper::getColumn($emails, 'id');
+            $ids = array_keys($emails);
             EmailItem::updateAll([
                 'session_id' => $session,
                 'date_send' => DateHelper::nowDate(),

@@ -78,7 +78,7 @@ class EmailSendController extends Controller
                     self::ONCE_LIMIT => [
                         'label' => Yii::t('backend', 'Once limit'),
                         'rules' => [
-                            ['integer'],
+                            ['integer'], ['number', 'max' => 50]
                         ]
                     ],
                     self::DATE_SEND => [
