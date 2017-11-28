@@ -64,5 +64,9 @@ class EmailItemRepositoryMap
         if (!$this->cat_id) {
             $this->cat_id = self::DEFAULT_CATEGORY;
         }
+
+        if (!$this->session_id) {
+            $this->session_id = time();
+        }
     }
 }
