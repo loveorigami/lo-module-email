@@ -48,12 +48,12 @@ class m161028_071146_email_item extends Migration
 
     public function down()
     {
-        $this->dropTable($this->tn(self::TBL));
-
         $this->dropForeignKey(
             $this->fk(self::TBL, self::TBL_PARENT),
             $this->tn(self::TBL)
         );
+
+        $this->dropTable($this->tn(self::TBL));
 
     }
 }
