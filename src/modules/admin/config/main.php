@@ -4,14 +4,9 @@ use lo\modules\email\adapters\EmailSettings;
 use lo\modules\email\adapters\EmailSettingsInterface;
 use lo\modules\email\modules\admin\services\Mailing;
 use lo\modules\email\modules\admin\services\MailingInterface;
-use lo\modules\email\repositories\EmailItemRepository;
-use lo\modules\email\repositories\EmailItemRepositoryInterface;
 
 return [
     'container' => [
-        'definitions' => [
-
-        ],
         'singletons' => [
             EmailSettingsInterface::class => [
                 'class' => EmailSettings::class,
