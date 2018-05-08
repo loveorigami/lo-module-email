@@ -5,6 +5,7 @@ namespace lo\modules\email\repositories;
 use lo\core\helpers\DateHelper;
 use lo\modules\email\models\EmailItem;
 use lo\modules\email\modules\admin\dto\MessageEventDto;
+use yii\db\Expression;
 
 /**
  * Class EmailItemRepository
@@ -31,6 +32,7 @@ class EmailItemRepository
 
     /**
      * @param EmailItem $item
+     * @throws \Throwable
      */
     public function add($item)
     {
@@ -42,6 +44,8 @@ class EmailItemRepository
 
     /**
      * @param EmailItem $item
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function save($item)
     {
@@ -53,6 +57,8 @@ class EmailItemRepository
 
     /**
      * @param EmailItem $item
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function unsubscribe($item)
     {
@@ -63,6 +69,8 @@ class EmailItemRepository
 
     /**
      * @param EmailItem $item
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function unsubscribeAuto($item)
     {
@@ -75,6 +83,8 @@ class EmailItemRepository
     /**
      * @param EmailItem $item
      * @param MessageEventDto $msg
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function unsubscribeBounce($item, MessageEventDto $msg)
     {
@@ -95,6 +105,8 @@ class EmailItemRepository
     /**
      * @param EmailItem $item
      * @param MessageEventDto $msg
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function subscribeOpen($item, MessageEventDto $msg)
     {
@@ -133,6 +145,8 @@ class EmailItemRepository
      * @param $cat_id
      * @param $session
      * @return EmailItem
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function findByGroupSession($cat_id, $session)
     {
@@ -161,16 +175,31 @@ class EmailItemRepository
     public function findEmailsByGroupSession($cat_id, $session, $limit)
     {
         $items = EmailItem::find()
-            ->where(['cat_id' => $cat_id])
-            ->andWhere(['not', ['session_id' => $session]])
-            ->orderBy(['date_send' => SORT_ASC])
+            ->alias('i')
+            ->innerJoinWith(['cat cat'])
+            ->select([
+                'i.*',
+                new Expression("`cat`.`slug` AS `list_name`"),
+                new Expression("`" . date('Y.m.d') . "` AS `date`"),
+            ])
+            ->where(['i.cat_id' => $cat_id])
+            ->andWhere(['not', ['i.session_id' => $session]])
+            ->orderBy(['i.date_send' => SORT_ASC])
             ->published()
             ->limit($limit)
-            ->indexBy('id')
+            ->indexBy('i.id')
             ->asArray()
             ->all();
 
         return $items;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSubstitutionDataKeys()
+    {
+        return ['hash', 'list_name', 'date'];
     }
 
     /**
@@ -220,6 +249,7 @@ class EmailItemRepository
     /**
      * @param array $data
      * @return EmailItem
+     * @throws \Throwable
      */
     public function addEmail(array $data)
     {
@@ -229,14 +259,6 @@ class EmailItemRepository
         $this->add($item);
 
         return $item;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSubstitutionDataKeys()
-    {
-        return ['hash'];
     }
 
     /**

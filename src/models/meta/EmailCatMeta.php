@@ -30,6 +30,17 @@ class EmailCatMeta extends MetaFields
                 ],
                 "params" => [$this->owner, "name"]
             ],
+            "slug" => [
+                "definition" => [
+                    "class" => fields\SlugField::class,
+                    "title" => Yii::t('backend', 'Slug'),
+                    "showInGrid" => true,
+                    "showInFilter" => true,
+                    "isRequired" => true,
+                    "editInGrid" => false,
+                ],
+                "params" => [$this->owner, "slug"]
+            ],
         ];
     }
 }
