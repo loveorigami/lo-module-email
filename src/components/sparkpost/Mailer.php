@@ -213,6 +213,7 @@ class Mailer extends BaseMailer
     /**
      * @param Message $message
      * @return bool
+     * @throws SparkPostException
      */
     protected function internalSend($message)
     {

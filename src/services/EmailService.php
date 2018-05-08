@@ -24,6 +24,7 @@ class EmailService
 
     /**
      * @param $data
+     * @throws \Throwable
      */
     public function createEmail($data)
     {
@@ -33,6 +34,8 @@ class EmailService
     /**
      * @param $email
      * @throws FlashErrorException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function unsubscribeByEmail($email)
     {
@@ -47,6 +50,8 @@ class EmailService
     /**
      * @param $hash
      * @throws FlashErrorException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function unsubscribeByHash($hash)
     {

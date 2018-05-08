@@ -176,18 +176,18 @@ class EmailItemRepository
     {
         $items = EmailItem::find()
             ->alias('i')
-            ->innerJoinWith(['cat cat'])
+            ->joinWith(['cat c'])
             ->select([
                 'i.*',
-                new Expression("`cat`.`slug` AS `list_name`"),
-                new Expression("`" . date('Y.m.d') . "` AS `date`"),
+                new Expression("`c`.`slug` AS `list_name`"),
+                new Expression("'" . date('Y.m.d') . "' AS `date`"),
             ])
             ->where(['i.cat_id' => $cat_id])
             ->andWhere(['not', ['i.session_id' => $session]])
             ->orderBy(['i.date_send' => SORT_ASC])
             ->published()
             ->limit($limit)
-            ->indexBy('i.id')
+            ->indexBy('id')
             ->asArray()
             ->all();
 
