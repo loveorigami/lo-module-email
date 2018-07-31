@@ -12,214 +12,223 @@ use yii\helpers\ArrayHelper;
 
 /**
  * Class EmailItemMeta
+ *
  * @package lo\modules\email\models
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * @author  Lukyanov Andrey <loveorigami@mail.ru>
  */
 class EmailItemMeta extends MetaFields
 {
-    const SPARKPOST_TAB = "SparkPost";
+    public const SPARKPOST_TAB = 'SparkPost';
 
     /**
-     * @inheritdoc
+     * @return array
      */
-    public function tabs()
+    public function tabs(): array
     {
         $tabs = parent::tabs();
-        $tabs[self::SPARKPOST_TAB] = Yii::t('backend', "SparkPost");
+        $tabs[self::SPARKPOST_TAB] = Yii::t('backend', 'SparkPost');
+
         return $tabs;
     }
 
     /**
      * Возвращает массив для привязки к категории
+     *
      * @return array
      */
-    public function getCats()
+    public function getCats(): array
     {
-        $models = EmailCat::find()->published()->orderBy(["name" => SORT_ASC])->asArray()->all();
-        return ArrayHelper::map($models, "id", "name");
+        $models = EmailCat::find()->published()->orderBy(['name' => SORT_ASC])->asArray()->all();
+
+        return ArrayHelper::map($models, 'id', 'name');
     }
 
     /**
      * Возвращает массив для привязки к категории
+     *
      * @return array
      */
-    public function getTypes()
+    public function getTypes(): array
     {
         $models = EmailItem::find()
             ->select(['sp_type'])
             ->distinct()
-            ->orderBy(["sp_type" => SORT_ASC])
+            ->orderBy(['sp_type' => SORT_ASC])
             ->asArray()
             ->all();
-        return ArrayHelper::map($models, "sp_type", "sp_type");
+
+        return ArrayHelper::map($models, 'sp_type', 'sp_type');
     }
 
     /**
-     * @inheritdoc
+     * @return array
      */
-    protected function config()
+    protected function config(): array
     {
         return [
-            "name" => [
-                "definition" => [
-                    "class" => fields\TextField::class,
-                    "title" => Yii::t('backend', 'Name'),
-                    "showInGrid" => false,
-                    "showInFilter" => true,
-                    "isRequired" => false,
+            'name' => [
+                'definition' => [
+                    'class' => fields\TextField::class,
+                    'title' => Yii::t('backend', 'Name'),
+                    'showInGrid' => false,
+                    'showInFilter' => true,
+                    'isRequired' => false,
                 ],
-                "params" => [$this->owner, "name"]
+                'params' => [$this->owner, 'name'],
             ],
-            "email" => [
-                "definition" => [
-                    "class" => fields\EmailField::class,
-                    "title" => Yii::t('backend', 'Email'),
-                    "showInGrid" => true,
-                    "showInFilter" => true,
-                    "isRequired" => true,
+            'email' => [
+                'definition' => [
+                    'class' => fields\EmailField::class,
+                    'title' => Yii::t('backend', 'Email'),
+                    'rules' => [
+                        'filter' => ['filter' => 'mb_strtolower'],
+                    ],
+                    'showInGrid' => true,
+                    'showInFilter' => true,
+                    'isRequired' => true,
                 ],
-                "params" => [$this->owner, "email"]
-            ],
-
-            "cat_id" => [
-                "definition" => [
-                    "class" => fields\HasOneField::class,
-                    "title" => Yii::t('backend', 'Cat'),
-                    "isRequired" => true,
-                    "data" => [$this, "getCats"], // массив всех категорий (см. выше)
-                    "eagerLoading" => true,
-                    "relationName" => "cat", // relation getCat
-                    "editInGrid" => true,
-                ],
-                "params" => [$this->owner, "cat_id"]
+                'params' => [$this->owner, 'email'],
             ],
 
-            "session_id" => [
-                "definition" => [
-                    "class" => fields\TextField::class,
-                    "title" => Yii::t('backend', 'Session'),
-                    "showInGrid" => true,
-                    "showInFilter" => true,
-                    "isRequired" => false,
+            'cat_id' => [
+                'definition' => [
+                    'class' => fields\HasOneField::class,
+                    'title' => Yii::t('backend', 'Cat'),
+                    'isRequired' => true,
+                    'data' => [$this, 'getCats'], // массив всех категорий (см. выше)
+                    'eagerLoading' => true,
+                    'relationName' => 'cat', // relation getCat
+                    'editInGrid' => true,
                 ],
-                "params" => [$this->owner, "session_id"]
+                'params' => [$this->owner, 'cat_id'],
             ],
 
-            "hash" => [
-                "definition" => [
-                    "class" => fields\HashField::class,
+            'session_id' => [
+                'definition' => [
+                    'class' => fields\TextField::class,
+                    'title' => Yii::t('backend', 'Session'),
+                    'showInGrid' => true,
+                    'showInFilter' => true,
+                    'isRequired' => false,
+                ],
+                'params' => [$this->owner, 'session_id'],
+            ],
+
+            'hash' => [
+                'definition' => [
+                    'class' => fields\HashField::class,
                     'hashMode' => fields\HashField::MODE_STRING,
                     'generateFrom' => 'email',
-                    "title" => Yii::t('backend', 'Hash'),
-                    "showInGrid" => false,
-                    "showInFilter" => false,
-                    "isRequired" => false,
+                    'title' => Yii::t('backend', 'Hash'),
+                    'showInGrid' => false,
+                    'showInFilter' => false,
+                    'isRequired' => false,
                 ],
-                "params" => [$this->owner, "hash"]
+                'params' => [$this->owner, 'hash'],
             ],
 
-            "date_send" => [
-                "definition" => [
-                    "class" => fields\DateField::class,
-                    "title" => Yii::t('backend', 'Date send'),
-                    "showInGrid" => true,
-                    "showInFilter" => true,
-                    "isRequired" => false,
+            'date_send' => [
+                'definition' => [
+                    'class' => fields\DateField::class,
+                    'title' => Yii::t('backend', 'Date send'),
+                    'showInGrid' => true,
+                    'showInFilter' => true,
+                    'isRequired' => false,
                 ],
-                "params" => [$this->owner, "date_send"]
+                'params' => [$this->owner, 'date_send'],
             ],
-            "date_subscribe" => [
-                "definition" => [
-                    "class" => fields\DateField::class,
-                    "title" => Yii::t('backend', 'Date subscribe'),
-                    "showInGrid" => false,
-                    "showInFilter" => true,
-                    "isRequired" => false,
+            'date_subscribe' => [
+                'definition' => [
+                    'class' => fields\DateField::class,
+                    'title' => Yii::t('backend', 'Date subscribe'),
+                    'showInGrid' => false,
+                    'showInFilter' => true,
+                    'isRequired' => false,
                 ],
-                "params" => [$this->owner, "date_subscribe"]
+                'params' => [$this->owner, 'date_subscribe'],
             ],
-            "date_unsubscribe" => [
-                "definition" => [
-                    "class" => fields\DateField::class,
-                    "title" => Yii::t('backend', 'Date unsubscribe'),
-                    "showInGrid" => true,
-                    "showInFilter" => true,
-                    "isRequired" => false,
+            'date_unsubscribe' => [
+                'definition' => [
+                    'class' => fields\DateField::class,
+                    'title' => Yii::t('backend', 'Date unsubscribe'),
+                    'showInGrid' => true,
+                    'showInFilter' => true,
+                    'isRequired' => false,
                 ],
-                "params" => [$this->owner, "date_unsubscribe"]
-            ],
-
-            "sp_raw_reason" => [
-                "definition" => [
-                    "class" => fields\TextAreaField::class,
-                    "title" => Yii::t('backend', 'Reason'),
-                    "showInGrid" => false,
-                    "showInFilter" => false,
-                    "isRequired" => false,
-                    "tab" => self::SPARKPOST_TAB,
-                ],
-                "params" => [$this->owner, "sp_raw_reason"]
+                'params' => [$this->owner, 'date_unsubscribe'],
             ],
 
-            "sp_bounce_class" => [
-                "definition" => [
-                    "class" => fields\NumberField::class,
-                    "title" => Yii::t('backend', 'Bounce class'),
-                    "showInGrid" => false,
-                    "showInFilter" => true,
-                    "isRequired" => false,
-                    "tab" => self::SPARKPOST_TAB,
+            'sp_raw_reason' => [
+                'definition' => [
+                    'class' => fields\TextAreaField::class,
+                    'title' => Yii::t('backend', 'Reason'),
+                    'showInGrid' => false,
+                    'showInFilter' => false,
+                    'isRequired' => false,
+                    'tab' => self::SPARKPOST_TAB,
                 ],
-                "params" => [$this->owner, "sp_bounce_class"]
+                'params' => [$this->owner, 'sp_raw_reason'],
             ],
 
-            "sp_error_code" => [
-                "definition" => [
-                    "class" => fields\NumberField::class,
-                    "title" => Yii::t('backend', 'Error Code'),
-                    "showInGrid" => false,
-                    "showInFilter" => true,
-                    "isRequired" => false,
-                    "tab" => self::SPARKPOST_TAB,
+            'sp_bounce_class' => [
+                'definition' => [
+                    'class' => fields\NumberField::class,
+                    'title' => Yii::t('backend', 'Bounce class'),
+                    'showInGrid' => false,
+                    'showInFilter' => true,
+                    'isRequired' => false,
+                    'tab' => self::SPARKPOST_TAB,
                 ],
-                "params" => [$this->owner, "sp_error_code"]
+                'params' => [$this->owner, 'sp_bounce_class'],
             ],
 
-            "sp_transmission_id" => [
-                "definition" => [
-                    "class" => fields\TextField::class,
-                    "title" => Yii::t('backend', 'Transmission Id'),
-                    "showInGrid" => false,
-                    "showInFilter" => true,
-                    "isRequired" => false,
-                    "tab" => self::SPARKPOST_TAB,
+            'sp_error_code' => [
+                'definition' => [
+                    'class' => fields\NumberField::class,
+                    'title' => Yii::t('backend', 'Error Code'),
+                    'showInGrid' => false,
+                    'showInFilter' => true,
+                    'isRequired' => false,
+                    'tab' => self::SPARKPOST_TAB,
                 ],
-                "params" => [$this->owner, "sp_transmission_id"]
+                'params' => [$this->owner, 'sp_error_code'],
             ],
 
-            "sp_timestamp" => [
-                "definition" => [
-                    "class" => fields\TextField::class,
-                    "title" => Yii::t('backend', 'Timestamp'),
-                    "showInGrid" => false,
-                    "showInFilter" => true,
-                    "isRequired" => false,
-                    "tab" => self::SPARKPOST_TAB,
+            'sp_transmission_id' => [
+                'definition' => [
+                    'class' => fields\TextField::class,
+                    'title' => Yii::t('backend', 'Transmission Id'),
+                    'showInGrid' => false,
+                    'showInFilter' => true,
+                    'isRequired' => false,
+                    'tab' => self::SPARKPOST_TAB,
                 ],
-                "params" => [$this->owner, "sp_timestamp"]
+                'params' => [$this->owner, 'sp_transmission_id'],
             ],
 
-            "sp_type" => [
-                "definition" => [
-                    "class" => fields\ListField::class,
-                    "title" => Yii::t('backend', 'Type'),
-                    "data" => [$this, 'getTypes'],
-                    "showInGrid" => true,
-                    "showInFilter" => true,
-                    "isRequired" => false,
-                    "tab" => self::SPARKPOST_TAB,
+            'sp_timestamp' => [
+                'definition' => [
+                    'class' => fields\TextField::class,
+                    'title' => Yii::t('backend', 'Timestamp'),
+                    'showInGrid' => false,
+                    'showInFilter' => true,
+                    'isRequired' => false,
+                    'tab' => self::SPARKPOST_TAB,
                 ],
-                "params" => [$this->owner, "sp_type"]
+                'params' => [$this->owner, 'sp_timestamp'],
+            ],
+
+            'sp_type' => [
+                'definition' => [
+                    'class' => fields\ListField::class,
+                    'title' => Yii::t('backend', 'Type'),
+                    'data' => [$this, 'getTypes'],
+                    'showInGrid' => true,
+                    'showInFilter' => true,
+                    'isRequired' => false,
+                    'tab' => self::SPARKPOST_TAB,
+                ],
+                'params' => [$this->owner, 'sp_type'],
             ],
         ];
     }

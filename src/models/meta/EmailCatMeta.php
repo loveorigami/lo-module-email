@@ -1,45 +1,46 @@
 <?php
+
 namespace lo\modules\email\models\meta;
 
 use Yii;
 use lo\core\db\MetaFields;
 use lo\core\db\fields;
 
-
 /**
  * Class EmailCatMeta
+ *
  * @package lo\modules\email\models
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * @author  Lukyanov Andrey <loveorigami@mail.ru>
  */
 class EmailCatMeta extends MetaFields
 {
     /**
-     * @inheritdoc
+     * @return array
      */
-    protected function config()
+    protected function config(): array
     {
         return [
-            "name" => [
-                "definition" => [
-                    "class" => fields\TextField::class,
-                    "title" => Yii::t('backend', 'Name'),
-                    "showInGrid" => true,
-                    "showInFilter" => true,
-                    "isRequired" => false,
-                    "editInGrid" => true,
+            'name' => [
+                'definition' => [
+                    'class' => fields\TextField::class,
+                    'title' => Yii::t('backend', 'Name'),
+                    'showInGrid' => true,
+                    'showInFilter' => true,
+                    'isRequired' => false,
+                    'editInGrid' => true,
                 ],
-                "params" => [$this->owner, "name"]
+                'params' => [$this->owner, 'name'],
             ],
-            "slug" => [
-                "definition" => [
-                    "class" => fields\SlugField::class,
-                    "title" => Yii::t('backend', 'Slug'),
-                    "showInGrid" => true,
-                    "showInFilter" => true,
-                    "isRequired" => true,
-                    "editInGrid" => false,
+            'slug' => [
+                'definition' => [
+                    'class' => fields\SlugField::class,
+                    'title' => Yii::t('backend', 'Slug'),
+                    'showInGrid' => true,
+                    'showInFilter' => true,
+                    'isRequired' => true,
+                    'editInGrid' => false,
                 ],
-                "params" => [$this->owner, "slug"]
+                'params' => [$this->owner, 'slug'],
             ],
         ];
     }

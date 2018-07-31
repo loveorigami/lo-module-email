@@ -59,6 +59,7 @@ $this->registerJs($js, yii\web\View::POS_END);
         ]); ?>
 
         <?= $meta->getField('cat_id')->getWrappedForm($form); ?>
+        <?= $meta->getField('status')->getWrappedForm($form); ?>
         <?= $form->field($model, 'list')->textarea(['rows' => 10]); ?>
 
         <div class="form-group">

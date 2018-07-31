@@ -12,8 +12,9 @@ use yii\web\Response;
 
 /**
  * Class EmailSendController
+ *
  * @package lo\modules\email\modules\admin\controllers
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * @author  Lukyanov Andrey <loveorigami@mail.ru>
  */
 class EmailImportController extends Controller
 {
@@ -24,10 +25,11 @@ class EmailImportController extends Controller
 
     /**
      * EmailSendController constructor.
-     * @param string $id
+     *
+     * @param string           $id
      * @param \yii\base\Module $module
-     * @param ImportService $service
-     * @param array $config
+     * @param ImportService    $service
+     * @param array            $config
      */
     public function __construct($id, $module, ImportService $service, $config = [])
     {
@@ -38,14 +40,14 @@ class EmailImportController extends Controller
     /**
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $model = new ImportForm();
         $item = new EmailItem();
 
         return $this->render('index', [
             'model' => $model,
-            'item' => $item
+            'item' => $item,
         ]);
     }
 
@@ -56,25 +58,27 @@ class EmailImportController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
+        $status = (int)Yii::$app->request->post('status');
         $email = Yii::$app->request->post('email');
-        $cat_id = Yii::$app->request->post('cat_id');
+        $cat_id = (int)Yii::$app->request->post('cat_id');
 
         $model = new EmailItem();
         $model->email = $email;
         $model->cat_id = $cat_id;
+        $model->status = $status;
 
         if ($model->validate()) {
             $data = [
-                'email' => $email,
-                'cat_id' => $cat_id,
-                'status' => 1
+                'email' => $model->email,
+                'cat_id' => $model->cat_id,
+                'status' => $model->status,
             ];
             $this->importService->createEmail($data);
         } else {
             $data = [
                 'email' => $email,
                 'cat_id' => $cat_id,
-                'status' => Html::errorSummary($model)
+                'status' => Html::errorSummary($model),
             ];
         }
 
