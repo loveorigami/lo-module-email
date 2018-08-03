@@ -30,15 +30,15 @@ use lo\modules\email\models\query\EmailItemQuery;
  */
 class EmailItem extends ActiveRecord
 {
-    public const STATUS_DRAFT = 0;
-    public const STATUS_PUBLISHED = 1;
+    const STATUS_DRAFT = 0;
+    const STATUS_PUBLISHED = 1;
 
-    public const CATEGORY_SUBSCRIBE = 8;
-    public const CATEGORY_CONTACT = 17;
-    public const CATEGORY_COMMENT = 18;
-    public const CATEGORY_MINI_SITE = 20;
-    public const CATEGORY_ORDER = 24;
-    public const CATEGORY_AUTO_UNSUBSCRIBE = 30;
+    const CATEGORY_SUBSCRIBE = 8;
+    const CATEGORY_CONTACT = 17;
+    const CATEGORY_COMMENT = 18;
+    const CATEGORY_MINI_SITE = 20;
+    const CATEGORY_ORDER = 24;
+    const CATEGORY_AUTO_UNSUBSCRIBE = 30;
 
     /**
      * @return string

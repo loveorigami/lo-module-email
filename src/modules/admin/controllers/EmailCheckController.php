@@ -147,6 +147,7 @@ class EmailCheckController extends Controller
 
         if ($state->isValid()) {
             $this->checkService->messageEventsList($date);
+            $this->settings->set(self::DATE_CHECK, $date);
         }
 
         $data = [

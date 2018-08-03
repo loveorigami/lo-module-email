@@ -209,6 +209,16 @@ Logs
 
 All mailer log messages are logged by `\Yii::error()`, `\Yii::warning()`, `\Yii::info()` under special category - `sparkpost-mailer`.
 
+Sql
+-------
+```sql
+SELECT GROUP_CONCAT(id) AS ids, email
+FROM `mx_email__item`
+GROUP BY hash
+HAVING COUNT(id)>1
+ORDER BY id
+```
+
 License
 -------
 

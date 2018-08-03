@@ -28,12 +28,15 @@ class CheckService
 
     /**
      * @param $date
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
-    public function messageEventsList($date)
+    public function messageEventsList($date): void
     {
         $date_from = $date;
         $date_to = DateHelper::rangeDateByDays(1, $date);
         $data1 = $this->mailing->getBouncesList($date_from, $date_to);
+        $data2 = $this->mailing->getOpenList($date_from, $date_to);
 
         foreach ($data1 as $result) {
             $msg = MessageEventDto::init($result);
@@ -42,7 +45,6 @@ class CheckService
             $this->emailRepository->unsubscribeBounce($item, $msg);
         }
 
-        $data2 = $this->mailing->getOpenList($date_from, $date_to);
         foreach ($data2 as $result) {
             $msg = MessageEventDto::init($result);
             $item = $this->emailRepository->findByEmail($msg->email);
