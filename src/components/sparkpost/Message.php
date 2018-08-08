@@ -4,20 +4,21 @@ namespace lo\modules\email\components\sparkpost;
 
 use yii\base\NotSupportedException;
 use yii\helpers\ArrayHelper;
-use yii\helpers\FileHelper;
 use yii\mail\BaseMessage;
 
 /**
  * Message is a representation of a message that will be consumed by Mailer.
  * Templates are supported and, if used, will override specified content data with template's ones.
- * @link https://developers.sparkpost.com/api/transmissions API Reference
- * @see Mailer
+ *
+ * @link   https://developers.sparkpost.com/api/transmissions API Reference
+ * @see    Mailer
  * @author Ustmaestro <ustmaestro@gmail.com>
  */
 class Message extends BaseMessage
 {
     /**
      * Helper map for composing sparkpost transmission
+     *
      * @var array
      */
     static private $transmissionAttributesMap = [
@@ -34,6 +35,7 @@ class Message extends BaseMessage
 
     /**
      * Helper map for composing message options
+     *
      * @var array
      */
     static private $optionsAttributesMap = [
@@ -49,6 +51,7 @@ class Message extends BaseMessage
 
     /**
      * Helper map for composing message content
+     *
      * @var array
      */
     static private $contentAttributesMap = [
@@ -66,16 +69,6 @@ class Message extends BaseMessage
         'use_draft_template',       // string
     ];
 
-    /**
-     * Helper map for composing attachments and images
-     * @var array
-     */
-    static private $fileAttributesMap = [
-        'type',         // string
-        'name',         // string
-        'data',         // string
-    ];
-
     private $_options = [];
     private $_campaign_id;
     private $_description;
@@ -91,13 +84,15 @@ class Message extends BaseMessage
     public function setOptions($options)
     {
         foreach (self::$optionsAttributesMap as $key) {
-            if (in_array($key, $options))
+            if (\in_array($key, $options, true)) {
                 $this->_options[$key] = $options[$key];
+            }
         }
+
         return $this;
     }
 
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->_options;
     }
@@ -105,6 +100,7 @@ class Message extends BaseMessage
     public function setCampaignId($campaign_id)
     {
         $this->_campaign_id = $campaign_id;
+
         return $this;
     }
 
@@ -116,6 +112,7 @@ class Message extends BaseMessage
     public function setDescription($description)
     {
         $this->_description = $description;
+
         return $this;
     }
 
@@ -127,10 +124,11 @@ class Message extends BaseMessage
     public function setMetadata($metadata)
     {
         $this->_metadata = $metadata;
+
         return $this;
     }
 
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->_metadata;
     }
@@ -138,10 +136,11 @@ class Message extends BaseMessage
     public function setSubstitutionData($substitution_data)
     {
         $this->_substitution_data = $substitution_data;
+
         return $this;
     }
 
-    public function getSubstitutionData()
+    public function getSubstitutionData(): array
     {
         return $this->_substitution_data;
     }
@@ -149,6 +148,7 @@ class Message extends BaseMessage
     public function setSubstitutionDataKeys($data)
     {
         $this->_substitution_data_keys = $data;
+
         return $this;
     }
 
@@ -156,7 +156,7 @@ class Message extends BaseMessage
      * @param $data
      * @return array
      */
-    public function getSubstitutionDataByKey($data)
+    public function getSubstitutionDataByKey($data): array
     {
         $item = [];
         foreach ($this->_substitution_data_keys as $key) {
@@ -164,12 +164,14 @@ class Message extends BaseMessage
                 $item[$key] = $data[$key];
             }
         }
+
         return $item;
     }
 
     public function setReturnPath($return_path)
     {
         $this->_return_path = $return_path;
+
         return $this;
     }
 
@@ -182,19 +184,21 @@ class Message extends BaseMessage
      * @param $content
      * @return $this
      */
-    public function setContent($content)
+    public function setContent($content): self
     {
         foreach (self::$contentAttributesMap as $key) {
-            if (in_array($key, $content))
+            if (\in_array($key, $content, true)) {
                 $this->_content[$key] = $content[$key];
+            }
         }
+
         return $this;
     }
 
     /**
      * @return array
      */
-    public function getContent()
+    public function getContent(): array
     {
         return $this->_content;
     }
@@ -202,10 +206,11 @@ class Message extends BaseMessage
     public function setRecipients($recipients)
     {
         $this->_recipients = $this->normalizeRecipientsEmails($recipients);
+
         return $this;
     }
 
-    public function getRecipients()
+    public function getRecipients(): array
     {
         return $this->_recipients;
     }
@@ -213,10 +218,11 @@ class Message extends BaseMessage
     public function setRecipientsList($recipients_list)
     {
         $this->_recipients_list = $recipients_list;
+
         return $this;
     }
 
-    public function getRecipientsList()
+    public function getRecipientsList(): array
     {
         return $this->_recipients_list;
     }
@@ -225,12 +231,13 @@ class Message extends BaseMessage
      * @param array|string $to
      * @return $this
      */
-    public function setTo($to)
+    public function setTo($to): self
     {
-        if (is_string($to)) {
+        if (\is_string($to)) {
             $to = $to ? [$to] : [];
         }
         $this->_recipients = $this->normalizeRecipientsEmails($to);
+
         return $this;
     }
 
@@ -243,139 +250,152 @@ class Message extends BaseMessage
     public function setHtmlBody($html)
     {
         $this->_content['html'] = $html;
+
         return $this;
     }
 
     public function getHtmlBody()
     {
-        return isset($this->_content['html']) ? $this->_content['html'] : null;
+        return $this->_content['html'] ?? null;
     }
 
     public function setTextBody($text)
     {
         $this->_content['text'] = $text;
+
         return $this;
     }
 
     public function getTextBody()
     {
-        return isset($this->_content['text']) ? $this->_content['text'] : null;
+        return $this->_content['text'] ?? null;
     }
 
     public function setRfc822Body($rfc822)
     {
         $this->_content['rfc822'] = $rfc822;
+
         return $this;
     }
 
     public function getRfc822Body()
     {
-        return isset($this->_content['rfc822']) ? $this->_content['rfc822'] : null;
+        return $this->_content['rfc822'] ?? null;
     }
 
     public function setPush($push)
     {
         $this->_content['push'] = $push;
+
         return $this;
     }
 
     public function getPush()
     {
-        return isset($this->_content['push']) ? $this->_content['push'] : null;
+        return $this->_content['push'] ?? null;
     }
 
     public function setSubject($subject)
     {
         $this->_content['subject'] = $subject;
+
         return $this;
     }
 
     public function getSubject()
     {
-        return isset($this->_content['subject']) ? $this->_content['subject'] : null;
+        return $this->_content['subject'] ?? null;
     }
 
     public function setFrom($from)
     {
         $this->_content['from'] = $this->normalizeFromEmail($from);
+
         return $this;
     }
 
     public function getFrom()
     {
-        return isset($this->_content['from']) ? $this->_content['from'] : null;
+        return $this->_content['from'] ?? null;
     }
 
     public function setReplyTo($replyTo)
     {
         $this->_content['reply_to'] = $replyTo;
+
         return $this;
     }
 
     public function getReplyTo()
     {
-        return isset($this->_content['reply_to']) ? $this->_content['reply_to'] : null;
+        return $this->_content['reply_to'] ?? null;
     }
 
     public function setHeaders($headers)
     {
         $this->_content['headers'] = $headers;
+
         return $this;
     }
 
     public function getHeaders()
     {
-        return isset($this->_content['headers']) ? $this->_content['headers'] : null;
+        return $this->_content['headers'] ?? null;
     }
 
     public function setAttachments($attachments)
     {
         $this->_content['attachments'] = $attachments;
+
         return $this;
     }
 
     public function getAttachments()
     {
-        return isset($this->_content['attachments']) ? $this->_content['attachments'] : null;
+        return $this->_content['attachments'] ?? null;
     }
 
     public function setInlineImages($inline_images)
     {
         $this->_content['inline_images'] = $inline_images;
+
         return $this;
     }
 
     public function getInlineImages()
     {
-        return isset($this->_content['inline_images']) ? $this->_content['inline_images'] : null;
+        return $this->_content['inline_images'] ?? null;
     }
 
     public function setTemplateId($template_id)
     {
         $this->_content['template_id'] = $template_id;
+
         return $this;
     }
 
     public function getTemplateId()
     {
-        return isset($this->_content['template_id']) ? $this->_content['template_id'] : null;
+        return $this->_content['template_id'] ?? null;
     }
 
     public function setUseDraftTemplate($use_draft_template)
     {
         $this->_content['use_draft_template'] = $use_draft_template;
+
         return $this;
     }
 
     public function getUseDraftTemplate()
     {
-        return isset($this->_content['use_draft_template']) ? $this->_content['use_draft_template'] : null;
+        return $this->_content['use_draft_template'] ?? null;
     }
 
     /* options attributes setters/getters  */
     public function setStartTime($start_time)
     {
         $this->_options['start_time'] = $start_time;
+
         return $this;
     }
 
@@ -387,6 +407,7 @@ class Message extends BaseMessage
     public function setOpenTracking($open_tracking)
     {
         $this->_options['open_tracking'] = $open_tracking;
+
         return $this;
     }
 
@@ -398,6 +419,7 @@ class Message extends BaseMessage
     public function setClickTracking($click_tracking)
     {
         $this->_options['click_tracking'] = $click_tracking;
+
         return $this;
     }
 
@@ -409,6 +431,7 @@ class Message extends BaseMessage
     public function setTransactional($transactional)
     {
         $this->_options['transactional'] = $transactional;
+
         return $this;
     }
 
@@ -420,6 +443,7 @@ class Message extends BaseMessage
     public function setSandbox($sandbox)
     {
         $this->_options['sandbox'] = $sandbox;
+
         return $this;
     }
 
@@ -431,6 +455,7 @@ class Message extends BaseMessage
     public function setSkipSuppression($skip_suppression)
     {
         $this->_options['skip_suppression'] = $skip_suppression;
+
         return $this;
     }
 
@@ -442,6 +467,7 @@ class Message extends BaseMessage
     public function setIpPool($ip_pool)
     {
         $this->_options['ip_pool'] = $ip_pool;
+
         return $this;
     }
 
@@ -453,6 +479,7 @@ class Message extends BaseMessage
     public function setInlineCss($inline_css)
     {
         $this->_options['inline_css'] = $inline_css;
+
         return $this;
     }
 
@@ -463,76 +490,90 @@ class Message extends BaseMessage
 
     /**
      * Get sparkpost transmission data
+     *
      * @return array
      */
-    public function getTransmissionData()
+    public function getTransmissionData(): array
     {
         $transmission = [];
         foreach (self::$transmissionAttributesMap as $key => $val) {
-            if ($this->{$val})
+            if ($this->{$val}) {
                 $transmission[$key] = $this->{$val};
+            }
         }
+
         return $transmission;
     }
 
     /**
      * Normalize emails array for recipients
+     *
      * @param array $emails
      * @return array
      */
-    private function normalizeRecipientsEmails($emails)
+    private function normalizeRecipientsEmails($emails): array
     {
         $addresses = [];
         foreach ($emails as $key => $data) {
-            if (is_int($key) && is_array($data)) {
-                $addresses[] = [
-                    'address' => ['email' => $data['email']],
-                    'substitution_data' => $this->getSubstitutionDataByKey($data)
-                ];
-            } elseif (is_int($key) && !is_array($data)) {
-                $addresses[] = [
-                    'address' => ['email' => $data],
-                ];
+            if (\is_int($key)) {
+                if (\is_array($data)) {
+                    $addresses[] = [
+                        'address' => ['email' => $data['email']],
+                        'substitution_data' => $this->getSubstitutionDataByKey($data),
+                    ];
+                } else {
+                    $addresses[] = [
+                        'address' => ['email' => $data],
+                    ];
+                }
             } else {
                 $addresses[] = [
-                    'address' => ['email' => $key, 'name' => $data]
+                    'address' => ['email' => $key, 'name' => $data],
                 ];
             }
         }
+
         return $addresses;
     }
 
     /**
      * Normalize from email
+     *
      * @param array|string $email
      * @return string
      */
-    private function normalizeFromEmail($email)
+    private function normalizeFromEmail($email): ?string
     {
-        if (is_string($email)) {
+        if (\is_string($email)) {
             return $email;
-        } elseif (is_array($email)) {
+        }
+
+        if (\is_array($email)) {
             return $this->emailsToString($email);
         }
+
+        return null;
     }
 
     /**
      * Converts emails array to the string: ['name' => 'email'] -> '"name" <email>'
+     *
      * @param array $emails
      * @return string
      */
-    private function emailsToString($emails)
+    private function emailsToString($emails): string
     {
         $addresses = [];
         foreach ($emails as $email => $name) {
             $name = trim($name);
-            if (is_int($email)) {
+            if (\is_int($email)) {
                 $addresses[] = $name;
             } else {
                 $email = trim($email);
                 $addresses[] = "\"{$name}\" <{$email}>";
             }
         }
+
         return implode(',', $addresses);
     }
 
@@ -540,6 +581,7 @@ class Message extends BaseMessage
 
     /**
      * Returns the character set of this message.
+     *
      * @return string the character set of this message.
      */
     public function getCharset()
@@ -558,20 +600,22 @@ class Message extends BaseMessage
 
     /**
      * Returns the Cc (additional copy receiver) addresses of this message.
+     *
      * @return array the Cc (additional copy receiver) addresses of this message.
      */
-    public function getCc()
+    public function getCc(): array
     {
-        //@todo: implement getCc
+        return [];
     }
 
     /**
      * Sets the Cc (additional copy receiver) addresses of this message.
+     *
      * @param string|array $cc copy receiver email address.
-     * You may pass an array of addresses if multiple recipients should receive this message.
-     * You may also specify receiver name in addition to email address using format:
-     * `[email => name]`.
-     * @return $this self reference.
+     *                         You may pass an array of addresses if multiple recipients should receive this message.
+     *                         You may also specify receiver name in addition to email address using format:
+     *                         `[email => name]`.
+     * @return void self reference.
      */
     public function setCc($cc)
     {
@@ -580,19 +624,21 @@ class Message extends BaseMessage
 
     /**
      * Returns the Bcc (hidden copy receiver) addresses of this message.
+     *
      * @return array the Bcc (hidden copy receiver) addresses of this message.
      */
-    public function getBcc()
+    public function getBcc(): array
     {
-        //@todo: implement getBcc
+        return [];
     }
 
     /**
      * Sets the Bcc (hidden copy receiver) addresses of this message.
+     *
      * @param string|array $bcc hidden copy receiver email address.
-     * You may pass an array of addresses if multiple recipients should receive this message.
-     * You may also specify receiver name in addition to email address using format:
-     * `[email => name]`.
+     *                          You may pass an array of addresses if multiple recipients should receive this message.
+     *                          You may also specify receiver name in addition to email address using format:
+     *                          `[email => name]`.
      * @return $this self reference.
      */
     public function setBcc($bcc)
@@ -602,8 +648,9 @@ class Message extends BaseMessage
 
     /**
      * Attaches existing file to the email message.
+     *
      * @param string $fileName full file name
-     * @param array $options options for embed file. Valid options are:
+     * @param array  $options  options for embed file. Valid options are:
      *
      * - fileName: name, which should be used to attach file.
      * - contentType: attached file MIME type.
@@ -617,8 +664,9 @@ class Message extends BaseMessage
 
     /**
      * Attach specified content as file for the email message.
+     *
      * @param string $content attachment file content.
-     * @param array $options options for embed file. Valid options are:
+     * @param array  $options options for embed file. Valid options are:
      *
      * - fileName: name, which should be used to attach file.
      * - contentType: attached file MIME type.
@@ -633,8 +681,9 @@ class Message extends BaseMessage
     /**
      * Attach a file and return it's CID source.
      * This method should be used when embedding images or other data in a message.
+     *
      * @param string $fileName file name.
-     * @param array $options options for embed file. Valid options are:
+     * @param array  $options  options for embed file. Valid options are:
      *
      * - fileName: name, which should be used to attach file.
      * - contentType: attached file MIME type.
@@ -649,8 +698,9 @@ class Message extends BaseMessage
     /**
      * Attach a content as file and return it's CID source.
      * This method should be used when embedding images or other data in a message.
+     *
      * @param string $content attachment file content.
-     * @param array $options options for embed file. Valid options are:
+     * @param array  $options options for embed file. Valid options are:
      *
      * - fileName: name, which should be used to attach file.
      * - contentType: attached file MIME type.
@@ -664,9 +714,10 @@ class Message extends BaseMessage
 
     /**
      * Returns string representation of this message.
+     *
      * @return string the string representation of this message.
      */
-    public function toString()
+    public function toString(): string
     {
         $to = ArrayHelper::getValue($this->getTo(), 'address.email', []);
         $cc = ArrayHelper::getValue($this->getCc(), 'address.email', []);
