@@ -63,7 +63,7 @@ class EmailImportController extends Controller
         $cat_id = (int)Yii::$app->request->post('cat_id');
 
         $model = new EmailItem();
-        $model->email = $email;
+        $model->email = mb_strtolower($email);
         $model->cat_id = $cat_id;
         $model->status = $status;
 
