@@ -35,6 +35,7 @@ function StartSend(e) {
             data: {
                 email: this,
                 cat_id: $('#emailitem-cat_id option:selected').val(),
+                status: $('#emailitem-status').val(),
             },
             success: function (data) {           
                 $('#log').html(data);
