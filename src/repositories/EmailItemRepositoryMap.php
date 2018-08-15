@@ -11,8 +11,8 @@ use lo\modules\email\models\EmailItem;
  */
 class EmailItemRepositoryMap
 {
-    const DEFAULT_AUTHOR = 1;
-    const DEFAULT_CATEGORY = EmailItem::CATEGORY_SUBSCRIBE;
+    public const DEFAULT_AUTHOR = 1;
+    public const DEFAULT_CATEGORY = EmailItem::CATEGORY_SUBSCRIBE;
 
     public $id;
     public $status = EmailItem::STATUS_PUBLISHED;
@@ -33,7 +33,7 @@ class EmailItemRepositoryMap
      * PluginDataDto constructor.
      * @param array $data
      */
-    public function __construct($data = [])
+    public function __construct(array $data = [])
     {
         foreach ($data as $key => $value) {
             if (property_exists($this, $key)) {
@@ -47,7 +47,7 @@ class EmailItemRepositoryMap
     /**
      * set defaults values
      */
-    protected function setDefaults()
+    protected function setDefaults(): void
     {
         if (!$this->date_subscribe) {
             $this->date_subscribe = date('Y-m-d');

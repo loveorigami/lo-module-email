@@ -4,9 +4,9 @@ namespace lo\modules\email\modules\admin\controllers;
 
 use lo\modules\email\forms\ImportForm;
 use lo\modules\email\models\EmailItem;
+use lo\modules\email\modules\admin\dto\ImportDto;
 use lo\modules\email\modules\admin\services\ImportService;
 use Yii;
-use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -58,29 +58,13 @@ class EmailImportController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $status = (int)Yii::$app->request->post('status');
         $email = Yii::$app->request->post('email');
-        $cat_id = (int)Yii::$app->request->post('cat_id');
+        $cat_id = Yii::$app->request->post('cat_id');
+        $status = Yii::$app->request->post('status');
 
-        $model = new EmailItem();
-        $model->email = mb_strtolower($email);
-        $model->cat_id = $cat_id;
-        $model->status = $status;
+        $dto = ImportDto::init($email, $cat_id, $status);
 
-        if ($model->validate()) {
-            $data = [
-                'email' => $model->email,
-                'cat_id' => $model->cat_id,
-                'status' => $model->status,
-            ];
-            $this->importService->createEmail($data);
-        } else {
-            $data = [
-                'email' => $email,
-                'cat_id' => $cat_id,
-                'status' => Html::errorSummary($model),
-            ];
-        }
+        $data = $this->importService->createOrUpdate($dto);
 
         return $this->renderAjax('log', ['data' => $data]);
     }

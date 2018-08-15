@@ -4,10 +4,10 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /**
- * @var yii\web\View $this
- * @var \lo\modules\email\forms\CheckForm $model
+ * @var yii\web\View                       $this
+ * @var \lo\modules\email\forms\CheckForm  $model
  * @var \lo\modules\email\models\EmailItem $item
- * @var array $data
+ * @var array                              $data
  */
 
 $this->title = Yii::t('backend', 'Import emails');
@@ -17,34 +17,42 @@ $meta = $item->getMetaFields();
 $js = "
 
 $('#start-send').click(StartSend);
-   
-function StartSend(e) {
-    e.preventDefault();
     
-    var lines = $('#importform-list').val().split(`\n`);
-    console.log(lines);
+function StartSend(e) 
+{
+    e.preventDefault();
+    var lines = $('#importform-list').val().split(`\n`);   
     var total = lines.length;
     var count = 0;
     
-    $.each(lines, function(){
-        $.ajax({
+    sendAjax(lines, total, count);
+   
+}
+
+function sendAjax(lines, total, count)
+{
+    if(count < total) {
+       $.ajax({
             url: $('#email-form').attr('action'),
             type: 'post',
             dataType: 'json',
             cache: false,
+            showNoty:false,
             data: {
-                email: this,
+                email: lines[count],
                 cat_id: $('#emailitem-cat_id option:selected').val(),
                 status: $('#emailitem-status').prop('checked'),
             },
             success: function (data) {           
-                $('#log').html(data);
+                $('#log').html(count + ' - ' + data);
+                count++;
+                sendAjax(lines, total, count);
             }
         });
-        
-    });
+    }
+}
 
-}";
+";
 
 $this->registerJs($js, yii\web\View::POS_END);
 ?>
@@ -66,7 +74,7 @@ $this->registerJs($js, yii\web\View::POS_END);
         <div class="form-group">
             <?= Html::submitButton('Начать импорт', [
                 'id' => 'start-send',
-                'class' => 'btn btn-primary'
+                'class' => 'btn btn-primary',
             ]) ?>
         </div>
 

@@ -17,8 +17,7 @@ class EmailService
 
     public function __construct(
         EmailItemRepository $emailRepository
-    )
-    {
+    ) {
         $this->emailRepository = $emailRepository;
     }
 
