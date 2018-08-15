@@ -16,12 +16,12 @@ class ImportDto
      * @param $status
      * @return ImportDto
      */
-    public static function init($email, $cat_id, $status): self
+    public static function init(string $email, int $cat_id, string $status): self
     {
         $state = new self;
         $state->email = mb_strtolower($email);
-        $state->cat_id = (int)$cat_id;
-        $state->status = (bool)$status ? EmailItem::STATUS_PUBLISHED : EmailItem::STATUS_DRAFT;
+        $state->cat_id = $cat_id;
+        $state->status = ($status === 'true') ? EmailItem::STATUS_PUBLISHED : EmailItem::STATUS_DRAFT;
 
         return $state;
     }

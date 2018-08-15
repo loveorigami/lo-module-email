@@ -58,9 +58,9 @@ class EmailImportController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $email = Yii::$app->request->post('email');
-        $cat_id = Yii::$app->request->post('cat_id');
-        $status = Yii::$app->request->post('status');
+        $email = (string)Yii::$app->request->post('email');
+        $cat_id = (int)Yii::$app->request->post('cat_id');
+        $status = (string)Yii::$app->request->post('status');
 
         $dto = ImportDto::init($email, $cat_id, $status);
 
