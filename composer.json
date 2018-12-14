@@ -23,6 +23,7 @@
     "php": ">=7.1",
     "yiisoft/yii2": "~2",
     "guzzlehttp/guzzle": "~6.2",
+    "php-http/guzzle6-adapter": "1.1.1",
     "sparkpost/sparkpost": "2.1.0"
   },
   "autoload": {
