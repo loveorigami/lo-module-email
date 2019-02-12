@@ -1,7 +1,7 @@
 <?php
 
 namespace lo\modules\email\adapters;
-use lo\core\components\SettingsInterface;
+use lo\core\interfaces\SettingsInterface;
 
 /**
  * Interface SettingsInterface
