@@ -1,7 +1,7 @@
 <?php
 
 namespace lo\modules\email\adapters;
-use lo\modules\settings\components\Settings;
+use lo\modules\core\settings\components\Settings;
 
 /**
  * Class EmailSettings
