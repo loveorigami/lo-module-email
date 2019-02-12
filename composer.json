@@ -30,5 +30,12 @@
     "psr-4": {
       "lo\\modules\\email\\": "src/"
     }
-  }
+  },
+	"extra": {
+		"config-plugin": {
+			"admin": [
+				"src/config/main.php"
+			]
+		}
+	}
 }
