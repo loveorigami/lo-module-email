@@ -4,6 +4,7 @@ use lo\modules\email\adapters\EmailSettings;
 use lo\modules\email\adapters\EmailSettingsInterface;
 use lo\modules\email\modules\admin\services\Mailing;
 use lo\modules\email\modules\admin\services\MailingInterface;
+use lo\modules\email\components\sparkpost\Mailer;
 
 return [
     'container' => [
