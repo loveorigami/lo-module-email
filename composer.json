@@ -33,11 +33,14 @@
   },
 	"extra": {
 		"config-plugin": {
+			"params": [
+				"src/modules/admin/config/params.php"
+			],
 			"admin": [
-				"src/modules/admin/config/main.php"
+				"src/modules/admin/config/admin.php"
 			],
 			"web": [
-				"src/config/main.php"
+				"src/config/web.php"
 			]
 		}
 	}

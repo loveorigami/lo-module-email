@@ -16,6 +16,16 @@ return [
             MailingInterface::class =>  Mailing::class
         ],
     ],
+	'components'=> [
+		'sparkpost' => [
+            'class' => Mailer::class,
+            'sandbox' => false,
+            'defaultEmail' => $params['robotEmail'],
+            'retryLimit' => 2,
+            'developmentMode' => false,
+            'apiKey' => $params['sparkpost.key'],
+        ],
+	],
     'modules' => [
         'email' => [
             'class' => 'lo\modules\email\modules\admin\Module',
