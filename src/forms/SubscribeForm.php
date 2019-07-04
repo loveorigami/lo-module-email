@@ -10,7 +10,7 @@ class SubscribeForm extends EmailItem
     /**
      * @inheritdoc
      */
-    public function metaClass()
+    public function metaClass(): string
     {
         return SubscribeFormMeta::class;
     }
