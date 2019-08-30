@@ -117,6 +117,7 @@ class EmailLogController extends Controller
         $state = $this->checkState($date);
 
         if ($state->isValid()) {
+            sleep(5);
             $this->logService->getMetricsList($date);
         }
 
