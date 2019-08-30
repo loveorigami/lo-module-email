@@ -1,4 +1,5 @@
 <?php
+
 namespace lo\modules\email\modules\admin\services;
 
 use lo\modules\email\models\EmailItem;
@@ -8,8 +9,9 @@ use yii\helpers\Html;
 
 /**
  * Class ImportService
+ *
  * @package lo\modules\email\modules\admin\services
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * @author  Lukyanov Andrey <loveorigami@mail.ru>
  */
 class ImportService
 {
@@ -17,8 +19,7 @@ class ImportService
 
     public function __construct(
         EmailItemRepository $emailRepository
-    )
-    {
+    ) {
         $this->emailRepository = $emailRepository;
     }
 
@@ -33,15 +34,15 @@ class ImportService
 
     public function createOrUpdate(ImportDto $dto): array
     {
-        $data = [
-            'email' => $dto->email,
-            'cat_id' => $dto->cat_id,
-            'status' => $dto->status,
-        ];
-
         $item = $this->emailRepository->findByEmail($dto->email);
 
         if (!$item) {
+
+            $data = [
+                'email' => $dto->email,
+                'cat_id' => $dto->cat_id,
+                'status' => $dto->status,
+            ];
 
             $form = new EmailItem();
             $form->setAttributes($data);
@@ -51,15 +52,42 @@ class ImportService
             } else {
                 $data['status'] = Html::errorSummary($form);
             }
-
-        } elseif ($item && $item->status !== $dto->status) {
-            $this->emailRepository->updEmail($item, $data);
-            $data['status'] = $dto->email . ' is updated';
         } else {
-            $data['status'] = $dto->email . ' not updated';
+            $data['status'] = $this->updItem($item, $dto);
         }
 
         return $data;
     }
 
+    protected function updItem(EmailItem $item, ImportDto $dto): string
+    {
+        $upd = false;
+        $data = [];
+        $mes = $dto->email . ' not updated';
+
+        /**
+         * Перемещаем
+         */
+        if ($dto->is_move && !$item->isHold()) {
+            $upd = true;
+            $data = [
+                'cat_id' => $dto->cat_id,
+                'email' => $dto->email,
+            ];
+            $mes = $dto->email . ' is moved';
+        } elseif ($item->status !== $dto->status) {
+            $mes = $dto->email . ' is updated';
+            $upd = true;
+            $data = [
+                'email' => $dto->email,
+                'status' => $dto->status,
+            ];
+        }
+
+        if ($upd) {
+            $this->emailRepository->updEmail($item, $data);
+        }
+
+        return $mes;
+    }
 }

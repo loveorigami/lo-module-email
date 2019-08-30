@@ -1,13 +1,16 @@
 <?php
 
+use lo\modules\email\forms\ImportForm;
+use lo\modules\email\models\EmailItem;
+use lo\widgets\Toggle;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /**
- * @var yii\web\View                       $this
- * @var \lo\modules\email\forms\CheckForm  $model
- * @var \lo\modules\email\models\EmailItem $item
- * @var array                              $data
+ * @var yii\web\View $this
+ * @var ImportForm   $model
+ * @var EmailItem    $item
+ * @var array        $data
  */
 
 $this->title = Yii::t('backend', 'Import emails');
@@ -37,11 +40,12 @@ function sendAjax(lines, total, count)
             type: 'post',
             dataType: 'json',
             cache: false,
-            showNoty:false,
+            showNoty: false,
             data: {
                 email: lines[count],
                 cat_id: $('#emailitem-cat_id option:selected').val(),
                 status: $('#emailitem-status').prop('checked'),
+                is_move: $('#importform-is_move').prop('checked')
             },
             success: function (data) {           
                 $('#log').html(count + ' - ' + data);
@@ -67,9 +71,27 @@ $this->registerJs($js, yii\web\View::POS_END);
             'action' => ['email-import/send'],
         ]); ?>
 
-        <?= $meta->getField('cat_id')->getWrappedForm($form); ?>
-        <?= $meta->getField('status')->getWrappedForm($form); ?>
-        <?= $form->field($model, 'list')->textarea(['rows' => 10]); ?>
+        <?= $meta->getField('cat_id')->getWrappedForm($form) ?>
+        <div class="row">
+            <div class="col-md-2">
+                <?= $form->field($model, 'is_move', [
+                    'template' => '{label} <div class="clearfix"></div>{input}{error}{hint}',
+                ])->widget(Toggle::class, [
+                    'options' => [
+                        'label' => null,
+                        'inline' => true,
+                        'data-on' => Yii::t('common', 'Yes'),
+                        'data-off' => Yii::t('common', 'No'),
+                    ],
+                ]) ?>
+            </div>
+            <div class="col-md-2">
+                <?= $meta->getField('status')->getWrappedForm($form) ?>
+            </div>
+        </div>
+
+
+        <?= $form->field($model, 'list')->textarea(['rows' => 10]) ?>
 
         <div class="form-group">
             <?= Html::submitButton('Начать импорт', [

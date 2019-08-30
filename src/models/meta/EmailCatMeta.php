@@ -2,6 +2,7 @@
 
 namespace lo\modules\email\models\meta;
 
+use lo\core\inputs\CheckBoxInputA;
 use Yii;
 use lo\core\db\MetaFields;
 use lo\core\db\fields;
@@ -41,6 +42,17 @@ class EmailCatMeta extends MetaFields
                     'editInGrid' => false,
                 ],
                 'params' => [$this->owner, 'slug'],
+            ],
+            'is_hold' => [
+                'definition' => [
+                    'class' => fields\CheckBoxField::class,
+                    'title' => Yii::t('backend', 'Is hold'),
+                    'inputClass' => CheckBoxInputA::class,
+                    'showInGrid' => true,
+                    'showInFilter' => true,
+                    'editInGrid' => true,
+                ],
+                'params' => [$this->owner, 'is_hold'],
             ],
         ];
     }

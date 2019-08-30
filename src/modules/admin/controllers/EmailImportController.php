@@ -7,6 +7,7 @@ use lo\modules\email\models\EmailItem;
 use lo\modules\email\modules\admin\dto\ImportDto;
 use lo\modules\email\modules\admin\services\ImportService;
 use Yii;
+use yii\base\Module;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -26,10 +27,10 @@ class EmailImportController extends Controller
     /**
      * EmailSendController constructor.
      *
-     * @param string           $id
-     * @param \yii\base\Module $module
-     * @param ImportService    $service
-     * @param array            $config
+     * @param string        $id
+     * @param Module        $module
+     * @param ImportService $service
+     * @param array         $config
      */
     public function __construct($id, $module, ImportService $service, $config = [])
     {
@@ -60,9 +61,10 @@ class EmailImportController extends Controller
 
         $email = (string)Yii::$app->request->post('email');
         $cat_id = (int)Yii::$app->request->post('cat_id');
-        $status = (string)Yii::$app->request->post('status');
+        $status = (string)Yii::$app->request->post('status'); // fix for checkboxes
+        $is_move = (string)Yii::$app->request->post('is_move');
 
-        $dto = ImportDto::init($email, $cat_id, $status);
+        $dto = ImportDto::init($email, $cat_id, $status, $is_move);
 
         $data = $this->importService->createOrUpdate($dto);
 

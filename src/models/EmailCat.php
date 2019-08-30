@@ -12,16 +12,17 @@ use lo\modules\email\models\meta\EmailCatMeta;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $is_hold
  */
 class EmailCat extends ActiveRecord
 {
-    const STATUS_DRAFT = 0;
-    const STATUS_PUBLISHED = 1;
+    public const STATUS_DRAFT = 0;
+    public const STATUS_PUBLISHED = 1;
 
     /**
      * @inheritdoc
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%email__cat}}';
     }
@@ -29,7 +30,7 @@ class EmailCat extends ActiveRecord
     /**
      * @inheritdoc
      */
-    public function metaClass()
+    public function metaClass(): string
     {
         return EmailCatMeta::class;
     }
