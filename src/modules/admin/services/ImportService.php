@@ -75,7 +75,7 @@ class ImportService
                 'email' => $dto->email,
             ];
             $mes = $dto->email . ' is moved';
-        } elseif ($item->status !== $dto->status) {
+        } elseif ($item->status !== $dto->status && $item->isActive()) {
             $mes = $dto->email . ' is updated';
             $upd = true;
             $data = [

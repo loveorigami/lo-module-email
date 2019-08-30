@@ -88,6 +88,13 @@ $this->registerJs($js, yii\web\View::POS_END);
             <div class="col-md-2">
                 <?= $meta->getField('status')->getWrappedForm($form) ?>
             </div>
+            <div class="col-md-8">
+                <div class="alert alert-success">
+                    <p>1. Если не нашел -> добавляем с нужным статусом</p>
+                    <p>2. Если нашел + перенос -> только перенос</p>
+                    <p>3. Если нашел - перенос -> меняяем статус только у активных</p>
+                </div>
+            </div>
         </div>
 
 
