@@ -8,22 +8,23 @@ use yii\helpers\ArrayHelper;
 
 /**
  * Class EmailItemMeta
+ *
  * @package lo\modules\email\models
- * @author Lukyanov Andrey <loveorigami@mail.ru>
+ * @author  Lukyanov Andrey <loveorigami@mail.ru>
  */
 class BackEmailItemMeta extends EmailItemMeta
 {
     /**
      * @inheritdoc
      */
-    protected function config()
+    protected function config(): array
     {
         return ArrayHelper::merge(parent::config(), [
             "email" => [
                 "definition" => [
                     "class" => fields\TextField::class,
                 ],
-            ]
+            ],
         ]);
     }
 }

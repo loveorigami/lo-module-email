@@ -10,7 +10,7 @@ class BackEmailItem extends EmailItem
     /**
      * @inheritdoc
      */
-    public function metaClass()
+    public function metaClass(): string
     {
         return BackEmailItemMeta::class;
     }
