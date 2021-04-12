@@ -267,7 +267,7 @@ class Mailer extends BaseMailer
      */
     public function getBouncesList($date_from, $date_to)
     {
-        $promise = $this->_sparky->request('GET', 'message-events', [
+        $promise = $this->_sparky->request('GET', 'events/message', [
             'events' => 'bounce,delay,policy_rejection,out_of_band,generation_failure,generation_rejection,spam_complaint,list_unsubscribe,link_unsubscribe',
             'from' => $date_from . 'T00:00',
             'to' => $date_to . 'T00:00',
